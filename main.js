@@ -168,3 +168,7 @@ function creation() {
 	player.creations++;
 	player.exist = player.exist.add(existOnCreate());
 }
+
+function start() {
+	setInterval(gameLoop, 33);
+}
