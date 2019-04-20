@@ -3,7 +3,7 @@ function get(id) {
 }
 function getDefaultSave() {
 	return {
-		ideas: new Decimal(1),
+		ideas: new Decimal(10),
 		thinkers: [
 			"empty",
 			{
@@ -82,12 +82,12 @@ function gameLoop() {
 function produce(time) {
 	player.ideas = player.thinkers[1].amount.times(time).add(player.ideas);
 	for(let i = 1; i < 8; i++) {
-		player.thinkers[i].amount = player.thinkers[i+1].amount.times(time).add(player.ideas);
+		player.thinkers[i].amount = player.thinkers[i+1].amount.times(time).add(player.thinkers[i].amount);
 	}
 }
 
 function update() {
-	get("ideas").innerHTML = player.ideas.toString();
+	get("ideas").innerHTML = player.ideas.floor().toString();
 	let unlocked7 = false;
 	for(let i = 1; i <= 8; i++) {
 		get("tier"+i+"Amount").innerHTML = player.thinkers[i].amount.floor().toString();
