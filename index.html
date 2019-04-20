@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+	<head>
+		<script src="main.js"></script>
+	</head>
+	<body onload="start()">
+		<button id="thinkerTab" onclick="showTab('thinkers')">Thinkers</button>
+		<button id="existenceTab" onclick="showTab('existence')">Existence</button>
+		<div id="thinkers" class="tab">
+			<p>You have <span id="ideas">0</span> ideas<p>
+			<table style="width:100%">
+				<tbody id="parent">
+					<tr id="tier1">
+						<td>
+							Tier 1 thinkers (<span id="tier1Amount">1</span>)
+						</td>
+						<td>
+							x<span id="tier1Mult">1</span>
+						</td>
+						<td>
+							<button id="buy1Tier1" onclick="buyTier(1)" align="right">Cost: <span id="tier1cost">10</span> ideas</button>
+						</td>
+						<td align="right">
+							<button id="buyMaxTier1" onclick="buyMaxTier(1)" align="right">Buy Max</button>
+						</td>
+					</tr>
+					<tr id="tier2" style="display: none">
+						<td>
+							Tier 2 thinkers (<span id="tier2">0</span>)
+						</td>
+						<td>
+							x<span id="tier2Mult">1</span>
+						</td>
+						<td>
+							<button id="buy1Tier2" onclick="buyTier(2)" align="right">Cost: <span id="tier2cost">100</span> ideas</button>
+						</td>
+						<td align="right">
+							<button id="buyMaxTier2" onclick="buyMaxTier(2)" align="right">Buy Max</button>
+						</td>
+					</tr>
+					<tr id="tier3" style="display: none">
+						<td>
+							Tier 3 thinkers (<span id="tier3">0</span>)
+						</td>
+						<td>
+							x<span id="tier3Mult">1</span>
+						</td>
+						<td>
+							<button id="buy1Tier3" onclick="buyTier(3)" align="right">Cost: <span id="tier3cost">10000</span> ideas</button>
+						</td>
+						<td align="right">
+							<button id="buyMaxTier3" onclick="buyMaxTier(3)" align="right">Buy Max</button>
+						</td>
+					</tr>
+					<tr id="tier4" style="display: none">
+						<td>
+							Tier 4 thinkers (<span id="tier4">0</span>)
+						</td>
+						<td>
+							x<span id="tier4Mult">1</span>
+						</td>
+						<td>
+							<button id="buy1Tier4" onclick="buyTier(4)" align="right">Cost: <span id="tier4cost">1000000</span> ideas</button>
+						</td>
+						<td align="right">
+							<button id="buyMaxTier4" onclick="buyMaxTier(4)" align="right">Buy Max</button>
+						</td>
+					</tr>
+					<tr id="tier5" style="display: none">
+						<td>
+							Tier 5 thinkers (<span id="tier5">0</span>)
+						</td>
+						<td>
+							x<span id="tier5Mult">1</span>
+						</td>
+						<td>
+							<button id="buy1Tier5" onclick="buyTier(5)" align="right">Cost: <span id="tier5cost">1e9</span> ideas</button>
+						</td>
+						<td align="right">
+							<button id="buyMaxTier5" onclick="buyMaxTier(5)" align="right">Buy Max</button>
+						</td>
+					</tr>
+					<tr id="tier6" style="display: none">
+						<td>
+							Tier 6 thinkers (<span id="tier6">0</span>)
+						</td>
+						<td>
+							x<span id="tier6Mult">1</span>
+						</td>
+						<td>
+							<button id="buy1Tier6" onclick="buyTier(6)" align="right">Cost: <span id="tier6cost">1e9</span> ideas</button>
+						</td>
+						<td align="right">
+							<button id="buyMaxTier6" onclick="buyMaxTier(6)" align="right">Buy Max</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<button style="display: none" onclick="creation()" align="middle" id="creation">Create some things<br/> Gain <span id="existOnCreate">0</span> existence</button>
+		</div>
+		<div id="existence" class="tab" style="display: none">
+			<p>You have <span id="exist">0</span> intelligence<p>
+			<table style="width:100%">
+				<tbody>
+					<tr>
+						<td>
+							<button id="upgrade11" onclick="buyUpgrade('11')">TBD</button>
+						</td>
+						<td align="right">
+							<button id="upgrade12" onclick="buyUpgrade('21')">TBD</button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<button id="upgrade11" onclick="buyUpgrade('21')">TBD</button>
+						</td>
+						<td align="right">
+							<button id="upgrade12" onclick="buyUpgrade('22)">TBD</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</body>
+</html>
