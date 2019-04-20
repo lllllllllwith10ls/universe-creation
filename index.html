@@ -7,12 +7,14 @@
 		<button id="thinkerTab" onclick="showTab('thinkers')">Thinkers</button>
 		<button id="existenceTab" onclick="showTab('existence')">Existence</button>
 		<div id="thinkers" class="tab">
-			<p>You have <span id="ideas">0</span> ideas<p>
+			<p>You have <span id="ideas">10</span> ideas<p>
+			<button onclick="maxAll(true)" id="weakMaxAll">Max all thinkers under tier 7</button>
+			<button onclick="maxAll(false)">Max all</button>
 			<table style="width:100%">
 				<tbody id="parent">
 					<tr id="tier1">
 						<td>
-							Tier 1 thinkers (<span id="tier1Amount">1</span>)
+							Tier 1 thinkers (<span id="tier1Amount">0</span>)
 						</td>
 						<td>
 							x<span id="tier1Mult">1</span>
@@ -88,10 +90,38 @@
 							x<span id="tier6Mult">1</span>
 						</td>
 						<td>
-							<button id="buy1Tier6" onclick="buyTier(6)" align="right">Cost: <span id="tier6cost">1e9</span> ideas</button>
+							<button id="buy1Tier6" onclick="buyTier(6)" align="right">Cost: <span id="tier6cost">1e11</span> ideas</button>
 						</td>
 						<td align="right">
 							<button id="buyMaxTier6" onclick="buyMaxTier(6)" align="right">Buy Max</button>
+						</td>
+					</tr>
+					<tr id="tier7" style="display: none">
+						<td>
+							Tier 7 thinkers (<span id="tier7">0</span>)
+						</td>
+						<td>
+							x<span id="tier7Mult">1</span>
+						</td>
+						<td>
+							<button id="buy1Tier7" onclick="buyTier(7)" align="right">Cost: <span id="tier7cost">100</span> existence</button>
+						</td>
+						<td align="right">
+							<button id="buyMaxTier7" onclick="buyMaxTier(7)" align="right">Buy Max</button>
+						</td>
+					</tr>
+					<tr id="tier8" style="display: none">
+						<td>
+							Tier 8 thinkers (<span id="tier8">0</span>)
+						</td>
+						<td>
+							x<span id="tier8Mult">1</span>
+						</td>
+						<td>
+							<button id="buy1Tier8" onclick="buyTier(8)" align="right">Cost: <span id="tier8cost">1000</span> existence</button>
+						</td>
+						<td align="right">
+							<button id="buyMaxTier8" onclick="buyMaxTier(8)" align="right">Buy Max</button>
 						</td>
 					</tr>
 				</tbody>
@@ -99,7 +129,7 @@
 			<button style="display: none" onclick="creation()" align="middle" id="creation">Create some things<br/> Gain <span id="existOnCreate">0</span> existence</button>
 		</div>
 		<div id="existence" class="tab" style="display: none">
-			<p>You have <span id="exist">0</span> intelligence<p>
+			<p>You have <span id="exist">0</span> existence<p>
 			<table style="width:100%">
 				<tbody>
 					<tr>
