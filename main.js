@@ -119,6 +119,11 @@ function update() {
 	} else {
 		get("creation").style.display = "none";
 	}
+	if(player.creations.gt(0)) {
+		get("existenceTab").style.display = "";
+	} else {
+		get("existenceTab").style.display = "none";
+	}
 }
 
 function existOnCreate() {
@@ -171,4 +176,11 @@ function creation() {
 
 function start() {
 	setInterval(gameLoop, 33);
+}
+function showTab(tab) {
+	let tabs = document.getElementsByClassName("tab");
+	for(let i = 0; i < tabs.length; i++) {
+		tabs[i].style.display = "none";
+	}
+	get(tab).style.display = "";
 }
