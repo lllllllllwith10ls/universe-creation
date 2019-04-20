@@ -80,9 +80,9 @@ function gameLoop() {
 }
 
 function produce(time) {
-	player.ideas = player.thinkers[1].times(time).add(player.ideas);
+	player.ideas = player.thinkers[1].amount.times(time).add(player.ideas);
 	for(let i = 1; i < 8; i++) {
-		player.thinkers[i] = player.thinkers[i+1].times(time).add(player.ideas);
+		player.thinkers[i].amount = player.thinkers[i+1].amount.times(time).add(player.ideas);
 	}
 }
 
