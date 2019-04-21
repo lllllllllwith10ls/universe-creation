@@ -188,6 +188,7 @@ function maxAll(weak) {
 	}
 }
 function creation() {
+	player.exist = player.exist.add(existOnCreate());
 	player.ideas = new Decimal(10);
 	for(let i = 1; i <= 6; i++) {
 		player.thinkers[i].amount = new Decimal(0);
@@ -207,7 +208,6 @@ function creation() {
 	player.thinkers[5].costMult = new Decimal(1.375);
 	player.thinkers[6].costMult = new Decimal(1.4);
 	player.creations = player.creations.add(1);
-	player.exist = player.exist.add(existOnCreate());
 }
 
 function start() {
