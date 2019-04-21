@@ -127,7 +127,7 @@ function update() {
 }
 
 function existOnCreate() {
-	return player.ideas.div(100).log2();
+	return player.ideas.div(100).log2()+1;
 }
 function buyTier(tier) {
 	if(player.ideas.gte(player.thinkers[tier].cost) && tier <= 6) {
@@ -170,7 +170,7 @@ function creation() {
 	player.thinkers[4].costMult = new Decimal(1.35);
 	player.thinkers[5].costMult = new Decimal(1.375);
 	player.thinkers[6].costMult = new Decimal(1.4);
-	player.creations++;
+	player.creations = player.creations.add(1)++;
 	player.exist = player.exist.add(existOnCreate());
 }
 
