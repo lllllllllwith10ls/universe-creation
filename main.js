@@ -96,11 +96,11 @@ function update() {
 		get("tier"+i+"Mult").innerHTML = format(player.thinkers[i].mult);
 		get("tier"+i+"Cost").innerHTML = format(player.thinkers[i].cost,true);
 		if(canBuyTier(i)) {
-			get("buy1Tier"+i).class = "storebtn";
-			get("buyMaxTier"+i).class = "storebtn";
+			get("buy1Tier"+i).className = "storebtn";
+			get("buyMaxTier"+i).className = "storebtn";
 		} else {
-			get("buy1Tier"+i).class = "storebtnlocked";
-			get("buyMaxTier"+i).class = "storebtnlocked";
+			get("buy1Tier"+i).className = "storebtnlocked";
+			get("buyMaxTier"+i).className = "storebtnlocked";
 		}
 		if(i <= 6) {
 			if(player.creations.gte(i-1)) {
