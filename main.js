@@ -276,6 +276,7 @@ function creation() {
 
 function start() {
 	setInterval(gameLoop, 33);
+	load();
 }
 function showTab(tab) {
 	let tabs = document.getElementsByClassName("tab");
