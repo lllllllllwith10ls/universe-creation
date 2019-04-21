@@ -195,6 +195,28 @@ function canBuyTier(tier) {
 		return false
 	}
 }
+function buyMaxTier(tier) {
+	if(tier <= 6) {
+		while(player.ideas.gte(player.thinkers[tier].cost)) {
+			buyTier(tier);
+		}
+	} else {
+		while(player.exist.gte(player.thinkers[tier].cost)) {
+			buyTier(tier);
+		}
+	}
+}
+function maxAll(weak) {
+	let j;
+	if(weak) {
+		j = 6;
+	} else {
+		j = 8;
+	}
+	for(let i = j; i > 0; i--) {
+		buyMaxTier(i);
+	}
+}
 function upgradeCost(upgrade) {
 	let cost = new Decimal(0);
 	switch(upgrade) {
@@ -227,31 +249,10 @@ function buyUpgrade(upgrade) {
 		} else {
 			player.upgrades.push("s"+upgrade);
 		}
-		player.exist.sub(upgradeCost(upgrade));
+		player.exist = player.exist.sub(upgradeCost(upgrade));
 	}
 }
-function buyMaxTier(tier) {
-	if(tier <= 6) {
-		while(player.ideas.gte(player.thinkers[tier].cost)) {
-			buyTier(tier);
-		}
-	} else {
-		while(player.exist.gte(player.thinkers[tier].cost)) {
-			buyTier(tier);
-		}
-	}
-}
-function maxAll(weak) {
-	let j;
-	if(weak) {
-		j = 6;
-	} else {
-		j = 8;
-	}
-	for(let i = j; i > 0; i--) {
-		buyMaxTier(i);
-	}
-}
+
 function creation() {
 	player.exist = player.exist.add(existOnCreate());
 	player.ideas = new Decimal(10);
