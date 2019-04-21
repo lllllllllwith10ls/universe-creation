@@ -3,14 +3,12 @@ td, button, p {
 }
 button {
 	padding: 1px 6px;
+	font-family: Consolas,monaco,monospace;
 }
 .storebtn {
 	color: black;
 	background: #F0F0F0;
-	font-family: Consolas,monaco,monospace;
 	border: 1px solid #12207A;
-	width: 120px;
-	height: 25px;
 	transition-duration: 0.2s;
 	cursor: pointer;
 	border-radius: 4px;
@@ -18,19 +16,30 @@ button {
 	vertical-align: top;
 }
 
+
 .storebtn:hover {
-	color: #FFF;
+	color: #FFFFFF;
 	background: #5A67C4;
 }
 
+.tabbtn {
+	color: black;
+	background: #F0F0F0;
+	border: 1px solid #12207A;
+	font-weight: bold;
+	border-radius: 4px;
+	transition-duration: 0.2s;
+	cursor: pointer;
+}
+.tabbtn:hover {
+	color: #FFFFFF;
+	background: #5A67C4;
+}
 .storebtnlocked {
 	
 	color: black;
 	background: #7c8dad;
-	font-family: Consolas,monaco,monospace;
 	border: 1px solid #443284;
-	width: 120px;
-	height: 25px;
 	transition-duration: 0.2s;
 	cursor: pointer;
 	border-radius: 4px;
@@ -45,13 +54,26 @@ button {
 .creationbtn {
 	color: #FFFFFF;
 	background: #000055;
-	font-family: Consolas,monaco,monospace;
 	border-radius: 4px;
 	transition-duration: 0.2s;
 	border: 1px solid #000055;
+	cursor: pointer;
 }
 
 .creationbtn:hover {
+	color: #000000;
+	background: #FFFFFF;
+}
+.creationtab {
+	color: #FFFFFF;
+	background: #000055;
+	border: 1px solid #000055;
+	font-weight: bold;
+	border-radius: 4px;
+	transition-duration: 0.2s;
+	cursor: pointer;
+}
+.creationtab:hover {
 	color: #000000;
 	background: #FFFFFF;
 }
