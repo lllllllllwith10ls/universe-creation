@@ -27,11 +27,14 @@ function exp() {
 	let parent = output.parentElement;
 
 	parent.style.display = "";
-	output.value = localStorage.getItem(btoa('universe_creation'));
+	output.value = btoa(localStorage.getItem(btoa('universe_creation')));
 
 	output.onblur = function() {
 		parent.style.display = "none";
 	}
+	
+	output.focus()
+	output.select()
 	try {
 		if (document.execCommand('copy')) {
 			get("exportButton").innerHTML = "Copied to clipboard";
@@ -39,7 +42,7 @@ function exp() {
 			setTimeout(changeExport, 5000);
 		}
 	} catch(ex) {
-		// well, we tried.
+		//rip
 	}
 }
 function changeExport() {
