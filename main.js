@@ -89,12 +89,12 @@ function produce(time) {
 }
 
 function update() {
-	get("ideas").innerHTML = format(player.ideas.floor());
+	get("ideas").innerHTML = format(player.ideas,true);
 	let unlocked7 = false;
 	for(let i = 1; i <= 8; i++) {
-		get("tier"+i+"Amount").innerHTML = format(player.thinkers[i].amount.floor());
+		get("tier"+i+"Amount").innerHTML = format(player.thinkers[i].amount,true);
 		get("tier"+i+"Mult").innerHTML = format(player.thinkers[i].mult);
-		get("tier"+i+"Cost").innerHTML = format(player.thinkers[i].cost.floor());
+		get("tier"+i+"Cost").innerHTML = format(player.thinkers[i].cost,true);
 		if(i <= 6) {
 			if(player.creations.gte(i-1)) {
 				get("tier"+i).style.display = "";
@@ -117,7 +117,7 @@ function update() {
 	}
 	if(existOnCreate().gte(1)) {
 		get("creation").style.display = "";
-		get("existOnCreate").innerHTML = format(existOnCreate().floor());
+		get("existOnCreate").innerHTML = format(existOnCreate(),true);
 	} else {
 		get("creation").style.display = "none";
 	}
@@ -192,7 +192,8 @@ function showTab(tab) {
 	}
 	get(tab).style.display = "";
 }
-function format(number) {
+function format(number,int=false) {
+	
 	let power;
 	let matissa;
 	let mag;
@@ -204,16 +205,20 @@ function format(number) {
 		matissa = number / Math.pow(10, Math.floor(Math.log10(number)));
 		power = Math.floor(Math.log10(number));
         }
-	matissa = matissa.toFixed(2);
-	if(mag) {
-		mag = mag.toFixed(2);
-	}
 	
 	if(power < 3) {
-		return (matissa*10^power).toFixed(2)
+		if(int) {
+			return (matissa*Math.pow(10,power)).toFixed(0);
+		} else {
+			return (matissa*Math.pow(10,power)).toFixed(2);
+		}
 	} if (number.layer === 0 || number.layer === 1) {
+		matissa = matissa.toFixed(2);
 		return matissa + "e" + power;
 	} else {
+		if(mag) {
+			mag = mag.toFixed(2);
+		}
 		if (number.layer <= 5) {
 			return (number.sign === -1 ? "-" : "") + "e".repeat(number.layer) + mag;
 		}
