@@ -66,6 +66,9 @@ function getDefaultSave() {
 		exist: new Decimal(0),
 		lastTick: new Date().getTime(),
 		creations: new Decimal(0),
+		upgrades: [],
+		existMult: new Decimal(1),
+		existMultCost: new Decimal(2),
 	}
 }
 
@@ -77,7 +80,7 @@ function gameLoop() {
 	player.lastTick = newTime;
 	produce(diff);
 	update();
-	update2();
+	mults();
 }
 
 function produce(time) {
@@ -134,14 +137,41 @@ function update() {
 	} else {
 		get("existenceTab").style.display = "none";
 	}
+	if(player.upgrades.includes("s11")) {
+		get("upgrade11").className = "upgradebtn upgradebought";
+	} else if(canBuyUpgrade("11")) {
+		get("upgrade11").className = "upgradebtn creationbtn";
+	} else {
+		get("upgrade11").className = "upgradebtn storebtnlocked";
+	}
+	
+	if(player.upgrades.includes("s21")) {
+		get("upgrade21").className = "upgradebtn upgradebought";
+	} else if(canBuyUpgrade("21")) {
+		get("upgrade21").className = "upgradebtn creationbtn";
+	} else {
+		get("upgrade21").className = "upgradebtn storebtnlocked";
+	}
+	if(canBuyUpgrade("12")) {
+		get("upgrade12").className = "upgradebtn creationbtn";
+	} else {
+		get("upgrade12").className = "upgradebtn storebtnlocked";
+	}
 }
-function update2() {
+function mults() {
 	for(let i = 1; i <= 8; i++) {
-		player.thinkers[i].mult = new Decimal(1.01).pow(player.thinkers[i].bought);
+		if(player.upgrades.includes("s11")) {
+			player.thinkers[i].mult = new Decimal(1.02).pow(player.thinkers[i].bought);
+		} else {
+			player.thinkers[i].mult = new Decimal(1.01).pow(player.thinkers[i].bought);
+		}
+		if(player.upgrades.includes("s21")) {
+			player.thinkers[i].mult = player.thinkers[i].mult.times(player.creations.cbrt());
+		}
 	}
 }
 function existOnCreate() {
-	return player.ideas.div(100).root(3);
+	return player.ideas.div(100).root(3).times(player.existMult);
 }
 function buyTier(tier) {
 	if(canBuyTier(tier) && tier <= 6) {
@@ -163,6 +193,40 @@ function canBuyTier(tier) {
 		return true;
 	} else {
 		return false
+	}
+}
+function upgradeCost(upgrade) {
+	let cost = new Decimal(0);
+	switch(upgrade) {
+		case "11":
+			cost = new Decimal(1);
+			break;
+		case "12":
+			cost = player.existMultCost;
+			break;
+		case "21":
+			cost = new Decimal(10);
+			break;
+	}
+	return cost;
+}
+function canBuyUpgrade(upgrade) {
+	let cost = upgradeCost(upgrade);
+	
+	if(player.exist.gte(cost)) {
+		return true;
+	}
+	return false;
+}
+function buyUpgrade(upgrade) {
+	if(canBuyUpgrade(upgrade)) {
+		if(upgrade === "12") {
+			player.existMultCost = player.existMultCost.times(2);
+			player.existMult = player.existMult.times(1.5);
+			
+		} else {
+			player.upgrades.push(upgrade);
+		}
 	}
 }
 function buyMaxTier(tier) {
