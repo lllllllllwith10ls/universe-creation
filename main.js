@@ -225,8 +225,9 @@ function buyUpgrade(upgrade) {
 			player.existMult = player.existMult.times(1.5);
 			
 		} else {
-			player.upgrades.push(upgrade);
+			player.upgrades.push("s"+upgrade);
 		}
+		player.exist.sub(upgradeCost(upgrade));
 	}
 }
 function buyMaxTier(tier) {
