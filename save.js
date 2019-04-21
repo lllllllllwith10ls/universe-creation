@@ -10,7 +10,7 @@ function load() {
 }
 
 function cleanSave(thing,defaultThing) {
-	for(let i in defualtThing) {
+	for(let i in defaultThing) {
 		if(thing[i] === undefined) {
 			thing[i] = defaultThing[i];
 		}
