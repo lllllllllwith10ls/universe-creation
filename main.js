@@ -89,12 +89,12 @@ function produce(time) {
 }
 
 function update() {
-	get("ideas").innerHTML = player.ideas.floor().toString();
+	get("ideas").innerHTML = format(player.ideas.floor());
 	let unlocked7 = false;
 	for(let i = 1; i <= 8; i++) {
-		get("tier"+i+"Amount").innerHTML = player.thinkers[i].amount.floor().toString();
-		get("tier"+i+"Mult").innerHTML = player.thinkers[i].mult.toString();
-		get("tier"+i+"Cost").innerHTML = player.thinkers[i].cost.floor().toString();
+		get("tier"+i+"Amount").innerHTML = format(player.thinkers[i].amount.floor());
+		get("tier"+i+"Mult").innerHTML = format(player.thinkers[i].mult);
+		get("tier"+i+"Cost").innerHTML = format(player.thinkers[i].cost.floor());
 		if(i <= 6) {
 			if(player.creations.gte(i-1)) {
 				get("tier"+i).style.display = "";
@@ -117,7 +117,7 @@ function update() {
 	}
 	if(existOnCreate().gte(1)) {
 		get("creation").style.display = "";
-		get("existOnCreate").innerHTML = existOnCreate().floor().toString();
+		get("existOnCreate").innerHTML = format(existOnCreate().floor());
 	} else {
 		get("creation").style.display = "none";
 	}
@@ -191,4 +191,35 @@ function showTab(tab) {
 		tabs[i].style.display = "none";
 	}
 	get(tab).style.display = "";
+}
+function format(number) {
+	let power;
+	let matissa;
+	let mag;
+	if (number instanceof Decimal) {
+		power = number.e;
+		matissa = number.mantissa;
+		mag = number.mag
+        } else {
+		matissa = number / Math.pow(10, Math.floor(Math.log10(number)));
+		power = Math.floor(Math.log10(number));
+        }
+	matissa = matissa.toFixed(2);
+	if(mag) {
+		mag = mag.toFixed(2);
+	}
+	
+	if(power < 3) {
+		return (matissa*10^power).toFixed(2)
+	} if (number.layer === 0 || number.layer === 1) {
+		matissa = matissa.toFixed(2);
+		return matissa + "e" + power;
+	} else {
+		if (number.layer <= 5) {
+			return (number.sign === -1 ? "-" : "") + "e".repeat(number.layer) + mag;
+		}
+		else {
+			return (number.sign === -1 ? "-" : "") + "(e^" + number.layer + ")" + mag;
+		}
+	}
 }
