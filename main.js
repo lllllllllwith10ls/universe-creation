@@ -189,7 +189,7 @@ function buyTier(tier) {
 function canBuyTier(tier) {
 	if(player.ideas.gte(player.thinkers[tier].cost) && tier <= 6) {
 		return true;
-	} else if(player.exist.gte(player.thinkers[tier].cost)) {
+	} else if(player.exist.gte(player.thinkers[tier].cost) && tier > 6) {
 		return true;
 	} else {
 		return false
