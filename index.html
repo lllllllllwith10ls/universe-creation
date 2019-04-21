@@ -6,12 +6,12 @@
 		<link rel="stylesheet" type="text/css" href="styles.css">
 	</head>
 	<body onload="start()">
-		<button id="thinkerTab" onclick="showTab('thinkers')" class="storeBtn">Thinkers</button>
-		<button id="existenceTab" onclick="showTab('existence')" style="display: none" class="creationButton">Existence</button>
+		<button id="thinkerTab" onclick="showTab('thinkers')" class="storebtn">Thinkers</button>
+		<button id="existenceTab" onclick="showTab('existence')" style="display: none" class="creationbtn">Existence</button>
 		<div id="thinkers" class="tab">
-			<p>You have <span id="ideas">10</span> ideas<p>
-			<button onclick="maxAll(true)" id="weakMaxAll" style="display: none">Max all thinkers under tier 7</button>
-			<button onclick="maxAll(false)">Max all</button>
+			<p>You have <span id="ideas">10</span> ideas</p>
+			<button onclick="maxAll(true)" id="weakMaxAll" style="display: none" class="storebtn">Max all thinkers under tier 7</button>
+			<button onclick="maxAll(false)" class="storebtn">Max all</button>
 			<table style="width:100%">
 				<tbody id="parent">
 					<tr id="tier1">
