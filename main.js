@@ -95,7 +95,7 @@ function update() {
 		get("tier"+i+"Amount").innerHTML = format(player.thinkers[i].amount,true);
 		get("tier"+i+"Mult").innerHTML = format(player.thinkers[i].mult);
 		get("tier"+i+"Cost").innerHTML = format(player.thinkers[i].cost,true);
-		if(canBuy(i)) {
+		if(canBuyTier(i)) {
 			get("buy1Tier"+i).class = "storebtn";
 			get("buyMaxTier"+i).class = "storebtn";
 		} else {
