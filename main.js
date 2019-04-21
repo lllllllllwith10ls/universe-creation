@@ -130,7 +130,7 @@ function update() {
 	}
 	if(player.creations.gt(0)) {
 		get("existenceTab").style.display = "";
-		get("exist").style.display = format(player.exist,true);
+		get("exist").innerHTML = format(player.exist,true);
 	} else {
 		get("existenceTab").style.display = "none";
 	}
