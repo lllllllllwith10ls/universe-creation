@@ -6,10 +6,10 @@
 	</head>
 	<body onload="start()">
 		<button id="thinkerTab" onclick="showTab('thinkers')">Thinkers</button>
-		<button id="existenceTab" onclick="showTab('existence')">Existence</button>
+		<button id="existenceTab" onclick="showTab('existence')" style="display: none">Existence</button>
 		<div id="thinkers" class="tab">
 			<p>You have <span id="ideas">10</span> ideas<p>
-			<button onclick="maxAll(true)" id="weakMaxAll">Max all thinkers under tier 7</button>
+			<button onclick="maxAll(true)" id="weakMaxAll" style="display: none">Max all thinkers under tier 7</button>
 			<button onclick="maxAll(false)">Max all</button>
 			<table style="width:100%">
 				<tbody id="parent">
