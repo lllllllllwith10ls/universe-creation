@@ -2,45 +2,65 @@
 	font-family: Consolas,monaco,monospace;
 }
 button {
-    padding: 1px 6px;
+	padding: 1px 6px;
 }
 .storebtn {
-    color: black;
-    background: #F0F0F0;
-    font-weight: bold;
-    font-family: Consolas,monaco,monospace;
-    border: 1px solid #12207A;
-    width: 120px;
-    height: 25px;
-    transition-duration: 0.2s;
-    cursor: pointer;
-    border-radius: 4px;
-    font-size: 13px;
-    vertical-align: top;
+	color: black;
+	background: #F0F0F0;
+	font-weight: bold;
+	font-family: Consolas,monaco,monospace;
+	border: 1px solid #12207A;
+	width: 120px;
+	height: 25px;
+	transition-duration: 0.2s;
+	cursor: pointer;
+	border-radius: 4px;
+	font-size: 13px;
+	vertical-align: top;
 }
 
 .storebtn:hover {
-    color: #FFF;
-    background: #5A67C4;
+	color: #FFF;
+	background: #5A67C4;
 }
 
 .storebtnlocked {
-    border-radius: 4px;
-    transition-duration: 0.2s;
-    position: absolute;
-    right: 75%;
-    top: 40px;
-    width: 200px;
-    height: 60px;
-    color: #000000;
-    background: #7384A3;
-    font-weight: bold;
-    font-family: Typewriter;
-    border: 1px solid #5F4BA8;
-    z-index: 1;
+	border-radius: 4px;
+	transition-duration: 0.2s;
+	position: absolute;
+	right: 75%;
+	top: 40px;
+	width: 200px;
+	height: 60px;
+	color: #000000;
+	background: #7384A3;
+	font-weight: bold;
+	font-family: Consolas,monaco,monospace;
+	border: 1px solid #5F4BA8;
+	z-index: 1;
 }
 
 .storebtnlocked:hover {
-    color: #000000;
-    background: #5F4BA8;
+	color: #000000;
+	background: #5F4BA8;
+}
+.creationbtn {
+	border-radius: 4px;
+	transition-duration: 0.2s;
+	position: absolute;
+	right: 75%;
+	top: 40px;
+	width: 200px;
+	height: 60px;
+	color: #FFFFFF;
+	background: #000055;
+	font-weight: bold;
+	font-family: Consolas,monaco,monospace;
+	border: 1px solid #000055;
+	z-index: 1;
+}
+
+.creationbtn:hover {
+	color: #000000;
+	background: #FFFFFF;
 }
