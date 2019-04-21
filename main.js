@@ -157,6 +157,8 @@ function update() {
 	} else {
 		get("upgrade12").className = "upgradebtn storebtnlocked";
 	}
+	get("existMult").innerHTML = format(player.existMult);
+	get("existMultCost").innerHTML = format(player.existMultCost,true);
 }
 function mults() {
 	for(let i = 1; i <= 8; i++) {
@@ -244,7 +246,7 @@ function buyUpgrade(upgrade) {
 	if(canBuyUpgrade(upgrade) && !player.upgrades.includes("s"+upgrade)) {
 		if(upgrade === "12") {
 			player.existMultCost = player.existMultCost.times(2);
-			player.existMult = player.existMult.times(1.5);
+			player.existMult = player.existMult.times(1.25);
 			
 		} else {
 			player.upgrades.push("s"+upgrade);
