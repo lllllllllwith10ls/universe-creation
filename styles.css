@@ -23,17 +23,8 @@ button {
 }
 
 .tabbtn {
-	color: black;
-	background: #F0F0F0;
-	border: 1px solid #12207A;
 	font-weight: bold;
-	border-radius: 4px;
-	transition-duration: 0.2s;
-	cursor: pointer;
-}
-.tabbtn:hover {
-	color: #FFFFFF;
-	background: #5A67C4;
+	font-size: large;
 }
 .storebtnlocked {
 	
@@ -61,19 +52,6 @@ button {
 }
 
 .creationbtn:hover {
-	color: #000000;
-	background: #FFFFFF;
-}
-.creationtab {
-	color: #FFFFFF;
-	background: #000055;
-	border: 1px solid #000055;
-	font-weight: bold;
-	border-radius: 4px;
-	transition-duration: 0.2s;
-	cursor: pointer;
-}
-.creationtab:hover {
 	color: #000000;
 	background: #FFFFFF;
 }
