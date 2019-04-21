@@ -159,6 +159,17 @@ function buyMaxTier(tier) {
 		}
 	}
 }
+function maxAll(weak) {
+	let j;
+	if(weak) {
+		j = 6;
+	} else {
+		j = 8;
+	}
+	for(let i = j; i > 0; i--) {
+		buyMaxTier(i);
+	}
+}
 function creation() {
 	player.ideas = new Decimal(10);
 	for(let i = 1; i <= 6; i++) {
