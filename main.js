@@ -141,7 +141,7 @@ function update2() {
 	}
 }
 function existOnCreate() {
-	return player.ideas.div(100).log2().add(1);
+	return player.ideas.div(100).root(3);
 }
 function buyTier(tier) {
 	if(canBuyTier(tier) && tier <= 6) {
