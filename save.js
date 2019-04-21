@@ -15,7 +15,7 @@ function cleanSave(thing,defaultThing) {
 			thing[i] = defaultThing[i];
 		}
 		if(typeof thing[i] === "object") {
-			cleanSave(thing,defaultThing);
+			cleanSave(thing[i],defaultThing[i]);
 		}
 		if(typeof thing[i] === "string" && thing[i][0] !== "s") {
 			thing[i] = new Decimal(thing[i]);
