@@ -6,6 +6,7 @@ function save() {
 function load() {
 	let save = JSON.parse(localStorage.getItem(btoa('universe_creation')));
 	cleanSave(save,getDefaultSave());
+	player = save;
 }
 
 function cleanSave(thing,defaultThing) {
