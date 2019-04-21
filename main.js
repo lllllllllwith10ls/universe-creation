@@ -212,7 +212,6 @@ function format(number) {
 	if(power < 3) {
 		return (matissa*10^power).toFixed(2)
 	} if (number.layer === 0 || number.layer === 1) {
-		matissa = matissa.toFixed(2);
 		return matissa + "e" + power;
 	} else {
 		if (number.layer <= 5) {
