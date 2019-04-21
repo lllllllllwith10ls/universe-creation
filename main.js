@@ -95,6 +95,13 @@ function update() {
 		get("tier"+i+"Amount").innerHTML = format(player.thinkers[i].amount,true);
 		get("tier"+i+"Mult").innerHTML = format(player.thinkers[i].mult);
 		get("tier"+i+"Cost").innerHTML = format(player.thinkers[i].cost,true);
+		if(canBuy(i)) {
+			get("buy1Tier"+i).class = "storebtn";
+			get("buyMaxTier"+i).class = "storebtn";
+		} else {
+			get("buy1Tier"+i).class = "storebtnlocked";
+			get("buyMaxTier"+i).class = "storebtnlocked";
+		}
 		if(i <= 6) {
 			if(player.creations.gte(i-1)) {
 				get("tier"+i).style.display = "";
@@ -123,6 +130,7 @@ function update() {
 	}
 	if(player.creations.gt(0)) {
 		get("existenceTab").style.display = "";
+		get("exist").style.display = format(player.exist,true);
 	} else {
 		get("existenceTab").style.display = "none";
 	}
@@ -136,16 +144,25 @@ function existOnCreate() {
 	return player.ideas.div(100).log2().add(1);
 }
 function buyTier(tier) {
-	if(player.ideas.gte(player.thinkers[tier].cost) && tier <= 6) {
+	if(canBuyTier(tier) && tier <= 6) {
 		player.thinkers[tier].amount = player.thinkers[tier].amount.add(1);
 		player.ideas = player.ideas.sub(player.thinkers[tier].cost);
 		player.thinkers[tier].cost = player.thinkers[tier].cost.times(player.thinkers[tier].costMult);
 		player.thinkers[tier].bought = player.thinkers[tier].bought.add(1);
-	} else if(player.exist.gte(player.thinkers[tier].cost)) {
+	} else if(canBuyTier(tier) && tier >= 7) {
 		player.thinkers[tier].amount = player.thinkers[tier].amount.add(1);
 		player.exist = player.exist.sub(player.thinkers[tier].cost);
 		player.thinkers[tier].cost = player.thinkers[tier].cost.times(player.thinkers[tier].costMult);
 		player.thinkers[tier].bought = player.thinkers[tier].bought.add(1);
+	}
+}
+function canBuyTier(tier) {
+	if(player.ideas.gte(player.thinkers[tier].cost) && tier <= 6) {
+		return true;
+	} else if(player.exist.gte(player.thinkers[tier].cost)) {
+		return true;
+	} else {
+		return false
 	}
 }
 function buyMaxTier(tier) {
