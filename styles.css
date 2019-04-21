@@ -60,3 +60,11 @@ button {
 	width: 190px;
 	height: 90px;
 }
+.upgradebought {
+    color: black;
+    background: #5AC467;
+    font-weight: bold;
+    font-size:  10px;
+    border: 1px solid #ED85DF;
+    border-radius: 4px;
+}
