@@ -219,7 +219,7 @@ function canBuyUpgrade(upgrade) {
 	return false;
 }
 function buyUpgrade(upgrade) {
-	if(canBuyUpgrade(upgrade)) {
+	if(canBuyUpgrade(upgrade) && !player.upgrades.includes("s"+upgrade)) {
 		if(upgrade === "12") {
 			player.existMultCost = player.existMultCost.times(2);
 			player.existMult = player.existMult.times(1.5);
