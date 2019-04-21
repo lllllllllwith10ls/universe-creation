@@ -115,7 +115,7 @@ function update() {
 	}
 	if(existOnCreate().gte(1)) {
 		get("creation").style.display = "";
-		get("existOnCreate").style.display = existOnCreate().floor().toString();
+		get("existOnCreate").innerHTML = existOnCreate().floor().toString();
 	} else {
 		get("creation").style.display = "none";
 	}
