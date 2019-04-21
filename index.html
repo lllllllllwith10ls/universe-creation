@@ -6,8 +6,8 @@
 		<link rel="stylesheet" type="text/css" href="styles.css">
 	</head>
 	<body onload="start()">
-		<button id="thinkerTab" onclick="showTab('thinkers')" class="storebtn">Thinkers</button>
-		<button id="existenceTab" onclick="showTab('existence')" style="display: none" class="creationbtn">Existence</button>
+		<button id="thinkerTab" onclick="showTab('thinkers')" class="tabbtn">Thinkers</button>
+		<button id="existenceTab" onclick="showTab('existence')" style="display: none" class="creationtab">Existence</button>
 		<div id="thinkers" class="tab">
 			<p>You have <span id="ideas">10</span> ideas</p>
 			<button onclick="maxAll(true)" id="weakMaxAll" style="display: none" class="storebtn">Max all thinkers under tier 7</button>
@@ -128,7 +128,7 @@
 					</tr>
 				</tbody>
 			</table>
-			<button class="creationButton" style="display: none; margin: auto;" onclick="creation()" id="creation">Create some things<br/> Gain <span id="existOnCreate">0</span> existence</button>
+			<button class="creationbtn" style="display: none; margin: auto;" onclick="creation()" id="creation">Create some things<br/> Gain <span id="existOnCreate">0</span> existence</button>
 		</div>
 		<div id="existence" class="tab" style="display: none">
 			<p>You have <span id="exist">0</span> existence<p>
