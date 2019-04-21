@@ -33,16 +33,16 @@ button {
 	width: 200px;
 	height: 60px;
 	color: #000000;
-	background: #7384A3;
+	background: #7c8dad;
 	font-weight: bold;
 	font-family: Consolas,monaco,monospace;
-	border: 1px solid #5F4BA8;
+	border: 1px solid #443284;
 	z-index: 1;
 }
 
 .storebtnlocked:hover {
-	color: #000000;
-	background: #5F4BA8;
+	color: #FFFFFF;
+	background: #443284;
 }
 .creationbtn {
 	border-radius: 4px;
