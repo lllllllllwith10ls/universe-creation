@@ -85,9 +85,9 @@ function gameLoop() {
 
 function produce(time) {
 	
-	player.ideas = player.thinkers[1].amount.times(time).add(player.ideas);
+	player.ideas = player.thinkers[1].amount.times(time).times(player.thinkers[1].mult).add(player.ideas);
 	for(let i = 1; i < 8; i++) {
-		player.thinkers[i].amount = player.thinkers[i+1].amount.times(time).add(player.thinkers[i].amount);
+		player.thinkers[i].amount = player.thinkers[i+1].amount.times(time).times(player.thinkers[i+1].mult).add(player.thinkers[i].amount);
 	}
 }
 
@@ -244,6 +244,7 @@ function canBuyUpgrade(upgrade) {
 }
 function buyUpgrade(upgrade) {
 	if(canBuyUpgrade(upgrade) && !player.upgrades.includes("s"+upgrade)) {
+		player.exist = player.exist.sub(upgradeCost(upgrade));
 		if(upgrade === "12") {
 			player.existMultCost = player.existMultCost.times(2);
 			player.existMult = player.existMult.times(1.25);
@@ -251,7 +252,6 @@ function buyUpgrade(upgrade) {
 		} else {
 			player.upgrades.push("s"+upgrade);
 		}
-		player.exist = player.exist.sub(upgradeCost(upgrade));
 	}
 }
 
