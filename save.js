@@ -8,6 +8,12 @@ function load() {
 	cleanSave(save,getDefaultSave());
 	player = save;
 }
+function reset() {
+	if (confirm("Are you sure? This will reset EVERYTHING!")) {
+		player = getDefaultSave();
+		save();
+	}
+}
 
 function cleanSave(thing,defaultThing) {
 	for(let i in defaultThing) {
