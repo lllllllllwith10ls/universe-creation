@@ -77,9 +77,11 @@ function gameLoop() {
 	player.lastTick = newTime;
 	produce(diff);
 	update();
+	update2();
 }
 
 function produce(time) {
+	
 	player.ideas = player.thinkers[1].amount.times(time).add(player.ideas);
 	for(let i = 1; i < 8; i++) {
 		player.thinkers[i].amount = player.thinkers[i+1].amount.times(time).add(player.thinkers[i].amount);
@@ -125,7 +127,11 @@ function update() {
 		get("existenceTab").style.display = "none";
 	}
 }
-
+function update2() {
+	for(let i = 1; i <= 8; i++) {
+		player.thinkers[i].mult = new Decimal(1.01).pow(player.thinkers[i].bought);
+	}
+}
 function existOnCreate() {
 	return player.ideas.div(100).log2().add(1);
 }
@@ -134,10 +140,12 @@ function buyTier(tier) {
 		player.thinkers[tier].amount = player.thinkers[tier].amount.add(1);
 		player.ideas = player.ideas.sub(player.thinkers[tier].cost);
 		player.thinkers[tier].cost = player.thinkers[tier].cost.times(player.thinkers[tier].costMult);
+		player.thinkers[tier].bought = player.thinkers[tier].bought.add(1);
 	} else if(player.exist.gte(player.thinkers[tier].cost)) {
 		player.thinkers[tier].amount = player.thinkers[tier].amount.add(1);
 		player.exist = player.exist.sub(player.thinkers[tier].cost);
 		player.thinkers[tier].cost = player.thinkers[tier].cost.times(player.thinkers[tier].costMult);
+		player.thinkers[tier].bought = player.thinkers[tier].bought.add(1);
 	}
 }
 function buyMaxTier(tier) {
