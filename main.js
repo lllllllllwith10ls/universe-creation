@@ -201,13 +201,13 @@ function update() {
 	get("existMultCost").innerHTML = format(player.existMultCost,true);
 	
 	if(player.upgrades.includes("s22")) {
-		get("upgrade21").className = "upgradebtn upgradebought";
+		get("upgrade22").className = "upgradebtn upgradebought";
 		get("creatorsSubtab").style.display = "";
 	} else if(canBuyUpgrade("22")) {
-		get("upgrade21").className = "upgradebtn creationbtn";
+		get("upgrade22").className = "upgradebtn creationbtn";
 		get("creatorsSubtab").style.display = "none";
 	} else {
-		get("upgrade21").className = "upgradebtn storebtnlocked";
+		get("upgrade22").className = "upgradebtn storebtnlocked";
 		get("creatorsSubtab").style.display = "none";
 	}
 	get("things").innerHTML = format(player.things,true);
