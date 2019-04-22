@@ -262,7 +262,7 @@ function mults() {
 	}
 }
 function existOnCreate() {
-	return player.ideas.div(100).root(6).times(player.existMult);
+	return player.ideas.div(100).log2().add(1).times(player.existMult);
 }
 function buyTier(tier) {
 	if(canBuyTier(tier) && tier <= 6) {
