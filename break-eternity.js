@@ -1893,7 +1893,7 @@
       //special case: if b is 0, then return 1
       if (b.sign === 0) { return FC_NN(1, 0, 1); }
       //special case: if a is 0, then return 0
-      if (b.sign === 0) { return a; }
+      if (a.sign === 0) { return a; }
       //special case: if b is 1, then return a
       if (b.sign === 1 && b.layer === 0 && b.mag === 1) { return a; }
       
