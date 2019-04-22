@@ -81,28 +81,28 @@ function getDefaultSave() {
 				cost:new Decimal(100),
 				mult:new Decimal(1),
 				bought:new Decimal(0),
-				costMult:new Decimal(2)
+				costMult:new Decimal(5)
 			},
 			{
 				amount:new Decimal(0),
 				cost:new Decimal(1000),
 				mult:new Decimal(1),
 				bought:new Decimal(0),
-				costMult:new Decimal(3)
+				costMult:new Decimal(10)
 			},
 			{
 				amount:new Decimal(0),
 				cost:new Decimal(100000),
 				mult:new Decimal(1),
 				bought:new Decimal(0),
-				costMult:new Decimal(4)
+				costMult:new Decimal(20)
 			},
 			{
 				amount:new Decimal(0),
 				cost:new Decimal(10000000),
 				mult:new Decimal(1),
 				bought:new Decimal(0),
-				costMult:new Decimal(5)
+				costMult:new Decimal(50)
 			}
 		],
 	}
