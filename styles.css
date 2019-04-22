@@ -49,6 +49,7 @@ button {
 	transition-duration: 0.2s;
 	border: 1px solid #000055;
 	cursor: pointer;
+	font-size: 13px;
 }
 
 .creationbtn:hover {
