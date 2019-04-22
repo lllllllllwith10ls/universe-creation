@@ -403,18 +403,11 @@ function showTab(tab) {
 }
 function showSubtab(subtab,tab) {
 	let subtabs = document.getElementsByClassName("subtab");
-	for(let i = 0; i < tabs.length; i++) {
+	for(let i = 0; i < subtabs.length; i++) {
 		subtabs[i].style.display = "none";
 	}
 	get(subtab).style.display = "";
 	player.subtab[tab] = "s "+subtab;
-}
-function showTab(tab) {
-	let tabs = document.getElementsByClassName("tab");
-	for(let i = 0; i < tabs.length; i++) {
-		tabs[i].style.display = "none";
-	}
-	get(tab).style.display = "";
 }
 function format(number,int=false) {
 	
