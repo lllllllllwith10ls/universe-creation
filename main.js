@@ -216,7 +216,7 @@ function update() {
 		get("tier"+i+"CAmount").innerHTML = format(player.creators[i].amount,true);
 		get("tier"+i+"CMult").innerHTML = format(player.creators[i].mult);
 		get("tier"+i+"CCost").innerHTML = format(player.creators[i].cost,true);
-		if(canBuyTier(i)) {
+		if(canBuyTierC(i)) {
 			get("buy1Tier"+i+"C").className = "creationbtn";
 			get("buyMaxTier"+i+"C").className = "creationbtn";
 		} else {
@@ -296,7 +296,7 @@ function maxAll(weak) {
 	}
 }
 function buyTierC(tier) {
-	if(canBuyTier(tier)) {
+	if(canBuyTierC(tier)) {
 		player.creators[tier].amount = player.creators[tier].amount.add(1);
 		player.exist = player.exist.sub(player.creators[tier].cost);
 		player.creators[tier].cost = player.creators[tier].cost.times(player.creators[tier].costMult);
