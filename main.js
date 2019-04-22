@@ -394,6 +394,7 @@ function creation() {
 	for(let i = 1; i <= 6; i++) {
 		player.thinkers[i].amount = new Decimal(0);
 		player.thinkers[i].bought = new Decimal(0);
+		player.thinkers[i].costScale = new Decimal(1.5);
 	}
 	player.thinkers[1].cost = new Decimal(10);
 	player.thinkers[2].cost = new Decimal(100);
