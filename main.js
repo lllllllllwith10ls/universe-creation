@@ -314,7 +314,7 @@ function canBuyTierC(tier) {
 	}
 }
 function buyMaxTierC(tier) {
-	while(player.exist.gte(player.creators[tier].cost)) {
+	while(canBuyTierC(tier)) {
 		buyTier(tier);
 	}
 }
