@@ -307,7 +307,7 @@ function buyTierC(tier) {
 	}
 }
 function canBuyTierC(tier) {
-	if(player.existence.gte(player.creators[tier].cost)) {
+	if(player.exist.gte(player.creators[tier].cost)) {
 		return true;
 	} else {
 		return false
