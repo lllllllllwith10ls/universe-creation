@@ -85,6 +85,8 @@ function getDefaultSave() {
 		upgrades: [],
 		existMult: new Decimal(1),
 		existMultCost: new Decimal(2),
+		existMultCostMult: new Decimal(2),
+		existMultCostScale: new Decimal(1.5),
 		tab: "s thinkers",
 		subtab: {
 			existence: "s existUpgrades",
@@ -379,9 +381,11 @@ function buyUpgrade(upgrade) {
 	if(canBuyUpgrade(upgrade) && !player.upgrades.includes("s"+upgrade)) {
 		player.exist = player.exist.sub(upgradeCost(upgrade));
 		if(upgrade === "12") {
-			player.existMultCost = player.existMultCost.times(2);
+			player.existMultCost = player.existMultCost.times(player.existMultCostMult);
 			player.existMult = player.existMult.times(1.25);
-			
+			if(player.existMultCost.gte(1e9)) {
+				player.existMultCostMult = player.existMultCostMult.times(player.existMultCostScale);
+			}
 		} else {
 			player.upgrades.push("s"+upgrade);
 		}
