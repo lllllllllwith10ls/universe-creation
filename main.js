@@ -273,8 +273,7 @@ function buyTier(tier) {
 		if(player.thinkers[tier].cost.gte(1e9)) {
 			player.thinkers[tier].costMult = player.thinkers[tier].costMult.times(player.thinkers[tier].costScale);
 			if(player.thinkers[tier].cost.gte(1e50)) {
-				player.thinkers[tier].costMult = player.thinkers[tier].costMult.times(player.thinkers[tier].costScale);
-				player.thinkers[tier].costScale = player.thinkers[tier].costMult.add(player.thinkers[tier].superCostScale);
+				player.thinkers[tier].costScale = player.thinkers[tier].costScale.add(player.thinkers[tier].superCostScale);
 			}
 		}
 	} else if(canBuyTier(tier) && tier >= 7) {
@@ -283,10 +282,9 @@ function buyTier(tier) {
 		player.thinkers[tier].cost = player.thinkers[tier].cost.times(player.thinkers[tier].costMult);
 		player.thinkers[tier].bought = player.thinkers[tier].bought.add(1);
 		if(player.thinkers[tier].cost.gte(1e3)) {
-			player.thinkers[tier].costMult = player.thinkers[tier].costMult.times(1.5);
+			player.thinkers[tier].costMult = player.thinkers[tier].costMult.times(player.thinkers[tier].costScale);
 			if(player.thinkers[tier].cost.gte(1e9)) {
-				player.thinkers[tier].costMult = player.thinkers[tier].costMult.times(player.thinkers[tier].costScale);
-				player.thinkers[tier].costScale = player.thinkers[tier].costMult.add(player.thinkers[tier].superCostScale);
+				player.thinkers[tier].costScale = player.thinkers[tier].costScale.add(player.thinkers[tier].superCostScale);
 			}
 		}
 	}
