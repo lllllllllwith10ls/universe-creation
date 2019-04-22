@@ -315,7 +315,7 @@ function canBuyTierC(tier) {
 }
 function buyMaxTierC(tier) {
 	while(canBuyTierC(tier)) {
-		buyTier(tier);
+		buyTierC(tier);
 	}
 }
 function maxAllC() {
