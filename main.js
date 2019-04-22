@@ -181,6 +181,9 @@ function buyTier(tier) {
 		player.ideas = player.ideas.sub(player.thinkers[tier].cost);
 		player.thinkers[tier].cost = player.thinkers[tier].cost.times(player.thinkers[tier].costMult);
 		player.thinkers[tier].bought = player.thinkers[tier].bought.add(1);
+		if(player.thinkers[tier].cost.gte(1e9)) {
+			player.thinkers[tier].costMult = player.thinkers[tier].costMult.times(1.5);
+		}
 	} else if(canBuyTier(tier) && tier >= 7) {
 		player.thinkers[tier].amount = player.thinkers[tier].amount.add(1);
 		player.exist = player.exist.sub(player.thinkers[tier].cost);
