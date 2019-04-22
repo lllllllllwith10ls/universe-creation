@@ -189,6 +189,9 @@ function buyTier(tier) {
 		player.exist = player.exist.sub(player.thinkers[tier].cost);
 		player.thinkers[tier].cost = player.thinkers[tier].cost.times(player.thinkers[tier].costMult);
 		player.thinkers[tier].bought = player.thinkers[tier].bought.add(1);
+		if(player.thinkers[tier].cost.gte(1e3)) {
+			player.thinkers[tier].costMult = player.thinkers[tier].costMult.times(1.5);
+		}
 	}
 }
 function canBuyTier(tier) {
