@@ -152,7 +152,7 @@ function update() {
 				get("tier"+i).style.display = "none";
 			}
 		} else {
-			if(player.exist.gte(player.thinkers[i].cost) || player.thinkers[i].amount.gt(0) && player.creations.gte(5)) {
+			if((player.exist.gte(player.thinkers[i].cost) || player.thinkers[i].amount.gt(0))&& player.creations.gte(5)) {
 				get("tier"+i).style.display = "";
 				unlocked7 = true;
 			} else {
