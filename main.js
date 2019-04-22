@@ -318,15 +318,9 @@ function buyMaxTierC(tier) {
 		buyTier(tier);
 	}
 }
-function maxAllC(weak) {
-	let j;
-	if(weak) {
-		j = 6;
-	} else {
-		j = 8;
-	}
-	for(let i = j; i > 0; i--) {
-		buyMaxTier(i);
+function maxAllC() {
+	for(let i = 4; i > 0; i--) {
+		buyMaxTierC(i);
 	}
 }
 function upgradeCost(upgrade) {
