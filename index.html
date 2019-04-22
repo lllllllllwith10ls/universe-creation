@@ -134,7 +134,7 @@
 		</div>
 		<div id="existence" class="tab" style="display: none">
 			<p>You have <span id="exist">0</span> existence</p>
-			<button id="existUpgradesSubtab" onclick="showSubab('existUpgrades')" class="storebtn">Existence</button>
+			<button id="existUpgradesSubtab" onclick="showSubtab('existUpgrades')" class="storebtn">Existence</button>
 			<button id="creatorsSubtab" onclick="showSubtab('creators')" style="display: none" class="storebtn">Settings</button>
 			<div id="existUpgrades" class="subtab">
 				<table style="width:100%">
@@ -159,6 +159,7 @@
 				</table>
 			</div>
 			<div id="creators" class="subtab">
+				<button onclick="maxAll()" class="creationbtn">Max all</button>
 				<p>You have <span id="things">0</span> things, translated to a x<span id="thingMult">1</span> multiplier to all thinkers</p>
 				<table style="width:100%">
 					<tbody id="parent">
