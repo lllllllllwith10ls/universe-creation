@@ -212,7 +212,7 @@ function update() {
 	}
 	get("things").innerHTML = format(player.things,true);
 	get("thingsMult").innerHTML = format(player.things.sqr().add(1),true);
-	for(let i = 1; i <= 8; i++) {
+	for(let i = 1; i <= 4; i++) {
 		get("tier"+i+"CAmount").innerHTML = format(player.creators[i].amount,true);
 		get("tier"+i+"CMult").innerHTML = format(player.creators[i].mult);
 		get("tier"+i+"CCost").innerHTML = format(player.creators[i].cost,true);
@@ -237,7 +237,7 @@ function mults() {
 		}
 		player.thinkers[i].mult = player.thinkers[i].mult.times(player.things.sqr().add(1));
 	}
-	for(let i = 1; i <= 8; i++) {
+	for(let i = 1; i <= 4; i++) {
 		player.creators[i].mult = new Decimal(1.1).pow(player.creators[i].bought);
 	}
 }
