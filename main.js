@@ -11,56 +11,72 @@ function getDefaultSave() {
 				cost:new Decimal(10),
 				mult:new Decimal(1),
 				bought:new Decimal(0),
-				costMult:new Decimal(1.15)
+				costMult:new Decimal(1.15),
+				costScale:new Decimal(1.5),
+				superCostScale:new Decimal(1.5)
 			},
 			{
 				amount:new Decimal(0),
 				cost:new Decimal(100),
 				mult:new Decimal(1),
 				bought:new Decimal(0),
-				costMult:new Decimal(1.2)
+				costMult:new Decimal(1.2),
+				costScale:new Decimal(1.5),
+				superCostScale:new Decimal(1.5)
 			},
 			{
 				amount:new Decimal(0),
 				cost:new Decimal(10000),
 				mult:new Decimal(1),
 				bought:new Decimal(0),
-				costMult:new Decimal(1.3)
+				costMult:new Decimal(1.3),
+				costScale:new Decimal(1.5),
+				superCostScale:new Decimal(1.5)
 			},
 			{
 				amount:new Decimal(0),
 				cost:new Decimal(1000000),
 				mult:new Decimal(1),
 				bought:new Decimal(0),
-				costMult:new Decimal(1.35)
+				costMult:new Decimal(1.35),
+				costScale:new Decimal(1.5),
+				superCostScale:new Decimal(1.5)
 			},
 			{
 				amount:new Decimal(0),
 				cost:new Decimal(1e9),
 				mult:new Decimal(1),
 				bought:new Decimal(0),
-				costMult:new Decimal(1.375)
+				costMult:new Decimal(1.375),
+				costScale:new Decimal(1.5),
+				superCostScale:new Decimal(1.5)
 			},
 			{
 				amount:new Decimal(0),
 				cost:new Decimal(1e11),
 				mult:new Decimal(1),
 				bought:new Decimal(0),
-				costMult:new Decimal(1.4)
+				costMult:new Decimal(1.4),
+				costScale:new Decimal(1.5),
+				superCostScale:new Decimal(1.5)
 			},
 			{
 				amount:new Decimal(0),
 				cost:new Decimal(100),
 				mult:new Decimal(1),
 				bought:new Decimal(0),
-				costMult:new Decimal(1.41)
+				costMult:new Decimal(1.41),
+				costScale:new Decimal(1.5),
+				superCostScale:new Decimal(1.5)
 			},
 			{
 				amount:new Decimal(0),
 				cost:new Decimal(1000),
 				mult:new Decimal(1),
 				bought:new Decimal(0),
-				costMult:new Decimal(1.42)
+				costMult:new Decimal(1.42),
+				costScale:new Decimal(1.5),
+				superCostScale:new Decimal(1.5)
 			}
 		],
 		exist: new Decimal(0),
@@ -251,7 +267,11 @@ function buyTier(tier) {
 		player.thinkers[tier].cost = player.thinkers[tier].cost.times(player.thinkers[tier].costMult);
 		player.thinkers[tier].bought = player.thinkers[tier].bought.add(1);
 		if(player.thinkers[tier].cost.gte(1e9)) {
-			player.thinkers[tier].costMult = player.thinkers[tier].costMult.times(1.5);
+			player.thinkers[tier].costMult = player.thinkers[tier].costMult.times(player.thinkers[tier].costScale);
+			if(player.thinkers[tier].cost.gte(1e50)) {
+				player.thinkers[tier].costMult = player.thinkers[tier].costMult.times(player.thinkers[tier].costScale);
+				player.thinkers[tier].costScale = player.thinkers[tier].costMult.times(player.thinkers[tier].superCostScale);
+			}
 		}
 	} else if(canBuyTier(tier) && tier >= 7) {
 		player.thinkers[tier].amount = player.thinkers[tier].amount.add(1);
