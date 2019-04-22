@@ -9,6 +9,7 @@
 	<body onload="start()">
 		<button id="thinkerTab" onclick="showTab('thinkers')" class="storebtn tabbtn">Thinkers</button>
 		<button id="existenceTab" onclick="showTab('existence')" style="display: none" class="creationbtn tabbtn">Existence</button>
+		<button id="abstractTab" onclick="showTab('abstract')" style="display: none" class="creationbtn tabbtn">Abstract</button>
 		<button id="settingsTab" onclick="showTab('settings')" class="storebtn tabbtn">Settings</button>
 		<div id="thinkers" class="tab">
 			<p>You have <span id="ideas">10</span> ideas</p>
@@ -131,6 +132,7 @@
 				</tbody>
 			</table>
 			<button class="creationbtn" style="display: none; margin: auto;" onclick="creation()" id="creation">Create some things<br/> Gain <span id="existOnCreate">0</span> existence</button>
+			<button class="creationbtn" style="display: none; margin: auto;" onclick="abstract()" id="abstraction">Abstract things<br/> Gain <span id="spaceOnAbstract">0</span> space</button>
 		</div>
 		<div id="existence" class="tab" style="display: none">
 			<p>You have <span id="exist">0</span> existence</p>
@@ -222,6 +224,12 @@
 					</tbody>
 				</table>
 			</div>
+		</div>
+		<div id="abstract" class="tab" style="display: none">
+			<p>You have <span id="space">0</span> space</p>
+			<p>Manifolds: <span id="manifolds">0</span></p>
+			<button id="buyManifold" onclick="buyManifold()" align="right">Buy manifold for a thinker multiplier<br/>Cost: <span id="manifoldCost">1</span> space</button>
+			
 		</div>
 		<div id="settings" class="tab" style="display: none">
 			<button id="saveButton" onclick="save()" class="storebtn">Save</button>

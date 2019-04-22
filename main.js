@@ -127,6 +127,13 @@ function getDefaultSave() {
 				costScale:new Decimal(5)
 			}
 		],
+		space: new Decimal(0),
+		abstractions: new Decimal(0),
+		manifolds: new Decimal(0),
+		manifoldCost: new Decimal(1),
+		manifoldCostMult: new Decimal(2),
+		manifoldCostScale: new Decimal(2),
+		manifoldMult: new Decimal(1),
 	}
 }
 
@@ -246,13 +253,34 @@ function update() {
 			get("buyMaxTier"+i+"C").className = "storebtnlocked";
 		}
 	}
+	if(spaceOnAbstract().gte(1)) {
+		get("abstraction").style.display = "";
+		get("spaceOnAbstract").innerHTML = format(spaceOnAbstract(),true);
+	} else {
+		get("abstraction").style.display = "none";
+	}
+
+	if(player.abstractions.gt(0)) {
+		get("abstractTab").style.display = "";
+		get("space").innerHTML = format(player.space,true);
+	} else {
+		get("abstractTab").style.display = "none";
+	}
+	get("manifolds").innerHTML = format(player.manifolds,true);
+	get("manifoldCost").innerHTML = format(player.manifoldCost,true);
+	if(canBuyManifold()) {
+		get("buyManifold").className = "storebtn";
+	} else {
+		get("buyManifold").className = "storebtnlocked";
+	}
 }
 function mults() {
+	player.manifoldMult = new Decimal(1.2).pow(player.manifolds);
 	for(let i = 1; i <= 8; i++) {
 		if(player.upgrades.includes("s11")) {
-			player.thinkers[i].mult = new Decimal(1.02).pow(player.thinkers[i].bought);
+			player.thinkers[i].mult = (player.manifoldMult.times(1.02)).pow(player.thinkers[i].bought);
 		} else {
-			player.thinkers[i].mult = new Decimal(1.01).pow(player.thinkers[i].bought);
+			player.thinkers[i].mult = (player.manifoldMult.times(1.01)).pow(player.thinkers[i].bought);
 		}
 		if(player.upgrades.includes("s21")) {
 			player.thinkers[i].mult = player.thinkers[i].mult.times(player.creations.cbrt());
@@ -264,7 +292,7 @@ function mults() {
 	}
 }
 function existOnCreate() {
-	return new Decimal(2).pow(player.ideas.log2().div(Math.log2(100))).times(player.existMult);
+	return new Decimal(2).pow((player.ideas.add(1)).log2().div(Math.log2(100)).sub(1)).times(player.existMult);
 }
 function buyTier(tier) {
 	if(canBuyTier(tier) && tier <= 6) {
@@ -416,6 +444,63 @@ function creation() {
 	player.creations = player.creations.add(1);
 }
 
+function spaceOnAbstract() {
+	return new Decimal(2).pow((player.exist.add(existOnCreate()).add(1)).log2().div(Math.log2(1e4)).sub(9));
+}
+
+function canBuyManifold() {
+	if(player.space.gte(player.manifoldCost)) {
+		return true;
+	} else {
+		return false
+	}
+}
+function buyManifold() {
+	if(canBuyManifold()) {
+		player.space = player.space.sub(player.manifoldCost);
+		player.manifolds = player.manifolds.add(1);
+		player.manifoldCost = player.manifoldCost.times(player.manifoldCostMult);
+		if(player.manifoldCost.gte(16)) {
+			player.manifoldCostMult = player.manifoldCostMult.times(player.manifoldCostScale);
+		}
+	}
+}
+function abstract() {
+	creation();
+	player.space = player.space.add(spaceOnAbstract());
+	player.exist = new Decimal(0);
+	for(let i = 7; i <= 8; i++) {
+		player.thinkers[i].amount = new Decimal(0);
+		player.thinkers[i].bought = new Decimal(0);
+		player.thinkers[i].costScale = new Decimal(1.5);
+	}
+	for(let i = 1; i <= 4; i++) {
+		player.creators[i].amount = new Decimal(0);
+		player.creators[i].bought = new Decimal(0);
+		player.creators[i].costScale = new Decimal(5);
+	}
+	player.thinkers[7].cost = new Decimal(10);
+	player.thinkers[8].cost = new Decimal(100);
+	player.creators[1].cost = new Decimal(100);
+	player.creators[2].cost = new Decimal(1000);
+	player.creators[3].cost = new Decimal(100000);
+	player.creators[4].cost = new Decimal(10000000);
+	
+	player.thinkers[7].costMult = new Decimal(1.41);
+	player.thinkers[8].costMult = new Decimal(1.42);
+	player.creators[1].costMult = new Decimal(5);
+	player.creators[2].costMult = new Decimal(10);
+	player.creators[3].costMult = new Decimal(20);
+	player.creators[4].costMult = new Decimal(50);
+	player.abstractions = player.abstractions.add(1);
+	player.creations = new Decimal(0);
+	player.things = new Decimal(0);
+	player.upgrades = [];
+	player.existMult = new Decimal(1);
+	player.existMultCost = new Decimal(2);
+	player.existMultCostMult = new Decimal(2);
+	player.existMultCostScale = new Decimal(1.5);
+}
 function start() {
 	setInterval(gameLoop, 33);
 	load();
@@ -441,6 +526,12 @@ function showSubtab(subtab,tab) {
 	player.subtab[tab] = "s "+subtab;
 }
 function format(number,int=false) {
+	
+	if(int && number instanceof Decimal) {
+		number = number.floor();
+	} else if(int) {
+		number = Math.floor(number);
+	}
 	
 	let power;
 	let matissa;
