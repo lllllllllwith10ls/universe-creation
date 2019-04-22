@@ -62,13 +62,49 @@ function getDefaultSave() {
 				bought:new Decimal(0),
 				costMult:new Decimal(1.42)
 			}
-			],
+		],
 		exist: new Decimal(0),
 		lastTick: new Date().getTime(),
 		creations: new Decimal(0),
 		upgrades: [],
 		existMult: new Decimal(1),
 		existMultCost: new Decimal(2),
+		tab: "s thinkers",
+		subtab: {
+			existence: "s existUpgrades",
+		},
+		things: new Decimal(0),
+		creators: [
+			"empty",
+			{
+				amount:new Decimal(0),
+				cost:new Decimal(100),
+				mult:new Decimal(1),
+				bought:new Decimal(0),
+				costMult:new Decimal(2)
+			},
+			{
+				amount:new Decimal(0),
+				cost:new Decimal(1000),
+				mult:new Decimal(1),
+				bought:new Decimal(0),
+				costMult:new Decimal(3)
+			},
+			{
+				amount:new Decimal(0),
+				cost:new Decimal(100000),
+				mult:new Decimal(1),
+				bought:new Decimal(0),
+				costMult:new Decimal(4)
+			},
+			{
+				amount:new Decimal(0),
+				cost:new Decimal(10000000),
+				mult:new Decimal(1),
+				bought:new Decimal(0),
+				costMult:new Decimal(5)
+			}
+		],
 	}
 }
 
@@ -85,6 +121,10 @@ function gameLoop() {
 
 function produce(time) {
 	
+	player.ideas = player.thinkers[1].amount.times(time).times(player.thinkers[1].mult).add(player.ideas);
+	for(let i = 1; i < 8; i++) {
+		player.thinkers[i].amount = player.thinkers[i+1].amount.times(time).times(player.thinkers[i+1].mult).add(player.thinkers[i].amount);
+	}
 	player.ideas = player.thinkers[1].amount.times(time).times(player.thinkers[1].mult).add(player.ideas);
 	for(let i = 1; i < 8; i++) {
 		player.thinkers[i].amount = player.thinkers[i+1].amount.times(time).times(player.thinkers[i+1].mult).add(player.thinkers[i].amount);
@@ -159,6 +199,31 @@ function update() {
 	}
 	get("existMult").innerHTML = format(player.existMult);
 	get("existMultCost").innerHTML = format(player.existMultCost,true);
+	
+	if(player.upgrades.includes("s22")) {
+		get("upgrade21").className = "upgradebtn upgradebought";
+		get("creatorsSubtab").style.display = "";
+	} else if(canBuyUpgrade("22")) {
+		get("upgrade21").className = "upgradebtn creationbtn";
+		get("creatorsSubtab").style.display = "none";
+	} else {
+		get("upgrade21").className = "upgradebtn storebtnlocked";
+		get("creatorsSubtab").style.display = "none";
+	}
+	get("things").innerHTML = format(player.things,true);
+	get("thingsMult").innerHTML = format(player.things.sqr().add(1),true);
+	for(let i = 1; i <= 8; i++) {
+		get("tier"+i+"CAmount").innerHTML = format(player.creators[i].amount,true);
+		get("tier"+i+"CMult").innerHTML = format(player.creators[i].mult);
+		get("tier"+i+"CCost").innerHTML = format(player.creators[i].cost,true);
+		if(canBuyTier(i)) {
+			get("buy1Tier"+i+"C").className = "creationbtn";
+			get("buyMaxTier"+i+"C").className = "creationbtn";
+		} else {
+			get("buy1Tier"+i+"C").className = "storebtnlocked";
+			get("buyMaxTier"+i+"C").className = "storebtnlocked";
+		}
+	}
 }
 function mults() {
 	for(let i = 1; i <= 8; i++) {
@@ -170,6 +235,10 @@ function mults() {
 		if(player.upgrades.includes("s21")) {
 			player.thinkers[i].mult = player.thinkers[i].mult.times(player.creations.cbrt());
 		}
+		player.thinkers[i].mult = player.thinkers[i].mult.times(player.things.sqr().add(1));
+	}
+	for(let i = 1; i <= 8; i++) {
+		player.creators[i].mult = new Decimal(1.1).pow(player.creators[i].bought);
 	}
 }
 function existOnCreate() {
@@ -214,7 +283,42 @@ function buyMaxTier(tier) {
 		}
 	}
 }
+
 function maxAll(weak) {
+	let j;
+	if(weak) {
+		j = 6;
+	} else {
+		j = 8;
+	}
+	for(let i = j; i > 0; i--) {
+		buyMaxTier(i);
+	}
+}
+function buyTierC(tier) {
+	if(canBuyTier(tier)) {
+		player.creators[tier].amount = player.creators[tier].amount.add(1);
+		player.exist = player.exist.sub(player.creators[tier].cost);
+		player.creators[tier].cost = player.creators[tier].cost.times(player.creators[tier].costMult);
+		player.creators[tier].bought = player.creators[tier].bought.add(1);
+		if(player.creators[tier].cost.gte(1e9)) {
+			player.creators[tier].costMult = player.creators[tier].costMult.times(1.5);
+		}
+	}
+}
+function canBuyTierC(tier) {
+	if(player.existence.gte(player.creators[tier].cost)) {
+		return true;
+	} else {
+		return false
+	}
+}
+function buyMaxTierC(tier) {
+	while(player.exist.gte(player.creators[tier].cost)) {
+		buyTier(tier);
+	}
+}
+function maxAllC(weak) {
 	let j;
 	if(weak) {
 		j = 6;
@@ -236,6 +340,9 @@ function upgradeCost(upgrade) {
 			break;
 		case "21":
 			cost = new Decimal(10);
+			break;
+		case "22":
+			cost = new Decimal(100);
 			break;
 	}
 	return cost;
@@ -287,6 +394,26 @@ function creation() {
 function start() {
 	setInterval(gameLoop, 33);
 	load();
+	showTab(player.tab.substr(2));
+}
+function showTab(tab) {
+	let tabs = document.getElementsByClassName("tab");
+	for(let i = 0; i < tabs.length; i++) {
+		tabs[i].style.display = "none";
+	}
+	get(tab).style.display = "";
+	if(player.subtab[tab]) {
+		showSubtab(player.subtab[tab].substr(2),tab);
+	}
+	player.tab = "s "+tab;
+}
+function showSubtab(subtab,tab) {
+	let subtabs = document.getElementsByClassName("subtab");
+	for(let i = 0; i < tabs.length; i++) {
+		subtabs[i].style.display = "none";
+	}
+	get(subtab).style.display = "";
+	player.subtab[tab] = "s "+subtab;
 }
 function showTab(tab) {
 	let tabs = document.getElementsByClassName("tab");
