@@ -125,9 +125,9 @@ function produce(time) {
 	for(let i = 1; i < 8; i++) {
 		player.thinkers[i].amount = player.thinkers[i+1].amount.times(time).times(player.thinkers[i+1].mult).add(player.thinkers[i].amount);
 	}
-	player.ideas = player.thinkers[1].amount.times(time).times(player.thinkers[1].mult).add(player.ideas);
-	for(let i = 1; i < 8; i++) {
-		player.thinkers[i].amount = player.thinkers[i+1].amount.times(time).times(player.thinkers[i+1].mult).add(player.thinkers[i].amount);
+	player.things = player.creators[1].amount.times(time).times(player.creators[1].mult).add(player.things);
+	for(let i = 1; i < 4; i++) {
+		player.creators[i].amount = player.creators[i+1].amount.times(time).times(player.creators[i+1].mult).add(player.creators[i].amount);
 	}
 }
 
