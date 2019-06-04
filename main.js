@@ -327,14 +327,8 @@ function canBuyTier(tier) {
 	}
 }
 function buyMaxTier(tier) {
-	if(tier <= 6) {
-		while(player.ideas.gte(player.thinkers[tier].cost)) {
-			buyTier(tier);
-		}
-	} else {
-		while(player.exist.gte(player.thinkers[tier].cost)) {
-			buyTier(tier);
-		}
+	while(canBuyTier(tier)) {
+		buyTier(tier);
 	}
 }
 
