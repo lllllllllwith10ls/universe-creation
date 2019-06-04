@@ -149,8 +149,8 @@ function gameLoop() {
 }
 
 function thinkerUnlocked(tier) {
-	if (tier <= 6) return player.creations.gte(i-1)
-	else return (player.exist.gte(player.thinkers[i].cost) || player.thinkers[i].amount.gt(0)) && player.creations.gte(5)
+	if (tier <= 6) return player.creations.gte(tier-1)
+	else return (player.exist.gte(player.thinkers[tier].cost) || player.thinkers[tier].amount.gt(0)) && player.creations.gte(5)
 }
 
 function produce(time) {
