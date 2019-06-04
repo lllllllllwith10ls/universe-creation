@@ -148,6 +148,11 @@ function gameLoop() {
 	mults();
 }
 
+function thinkerUnlocked(tier) {
+	if (tier <= 6) return player.creations.gte(i-1)
+	else return (player.exist.gte(player.thinkers[i].cost) || player.thinkers[i].amount.gt(0)) && player.creations.gte(5)
+}
+
 function produce(time) {
 	
 	player.ideas = player.thinkers[1].amount.times(time).times(player.thinkers[1].mult).add(player.ideas);
@@ -174,19 +179,11 @@ function update() {
 			get("buy1Tier"+i).className = "storebtnlocked";
 			get("buyMaxTier"+i).className = "storebtnlocked";
 		}
-		if(i <= 6) {
-			if(player.creations.gte(i-1)) {
-				get("tier"+i).style.display = "";
-			} else {
-				get("tier"+i).style.display = "none";
-			}
+		if(thinkerUnlocked(i)) {
+			get("tier"+i).style.display = "";
+			if (i==7) unlocked7 = true
 		} else {
-			if((player.exist.gte(player.thinkers[i].cost) || player.thinkers[i].amount.gt(0))&& player.creations.gte(5)) {
-				get("tier"+i).style.display = "";
-				unlocked7 = true;
-			} else {
-				get("tier"+i).style.display = "none";
-			}
+			get("tier"+i).style.display = "none";
 		}
 	}
 	if(unlocked7) {
@@ -320,6 +317,7 @@ function buyTier(tier) {
 	}
 }
 function canBuyTier(tier) {
+	if (!thinkerUnlocked(tier)) return false
 	if(player.ideas.gte(player.thinkers[tier].cost) && tier <= 6) {
 		return true;
 	} else if(player.exist.gte(player.thinkers[tier].cost) && tier > 6) {
