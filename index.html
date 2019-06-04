@@ -10,6 +10,7 @@
 		<button id="thinkerTab" onclick="showTab('thinkers')" class="storebtn tabbtn">Thinkers</button>
 		<button id="existenceTab" onclick="showTab('existence')" style="display: none" class="creationbtn tabbtn">Existence</button>
 		<button id="abstractTab" onclick="showTab('abstract')" style="display: none" class="creationbtn tabbtn">Abstract</button>
+		<button id="upgradeTreeTab" onclick="showTab('upgradeTree')" class="storebtn tabbtn">Upgrade Tree</button>
 		<button id="settingsTab" onclick="showTab('settings')" class="storebtn tabbtn">Settings</button>
 		<div id="thinkers" class="tab">
 			<p>You have <span id="ideas">10</span> ideas</p>
@@ -231,6 +232,85 @@
 			<button id="buyManifold" onclick="buyManifold()" align="right">Buy manifold for a thinker multiplier<br/>Cost: <span id="manifoldCost">1</span> space</button>
 			
 		</div>
+		<div id="upgradeTree" class="tab" style="display: none">
+			<button id="treeUpgradesSubtab" onclick="showSubtab('treeUpgrades','upgradeTree')" class="storebtn">Upgrades</button>
+			<button id="autobuyersSubtab" onclick="showSubtab('autobuyers','upgradeTree')" style="display: none" class="storebtn">Autobuyers</button>
+			<div id="treeUpgrades" class="subtab">
+				<canvas id="treeCanvas"></canvas>
+	            <table id="upgradeTable" style="display: flex; justify-content: center">
+	                <tr>
+	                    <td><button class="upgradebtn creationbtn" id="st11" onclick="buyTreeUpgrade('t11')">Manifolds affect creators at a reduced rate.<br/>Cost: 100 space</button></td>
+	                </tr>
+	            </table>
+	            <table id="upgradeTable" style="display: flex; justify-content: center">
+	                <tr>
+	                    <td><button class="treebtn creationbtn" id="st21" onclick="buyTreeUpgrade('t21')">Manifold cost scaling is 1.5 times weaker<br/>Cost: 1e9 space</button></td>
+	                	<td><button class="treebtn creationbtn" id="st22" onclick="buyTreeUpgrade('t22')">Manifolds are raised to the power of 1.5<br/>Cost: 1e9 space</button></td>
+	                </tr>
+	            </table>
+	            <table id="upgradeTable" style="display: flex; justify-content: center">
+	                <tr>
+	                    <td><button class="upgradebtn creationbtn" id="st31" onclick="buyTreeUpgrade('t31')">
+	                    Unlock autobuyers, and have all existence upgrades unlocked at the start of each abstract<br/>Cost: 1e33 space</button></td>
+	                </tr>
+	            </table>
+	        </div>
+	        <div id="autobuyers" style="display: none" class="subtab">
+				<table>
+					<tr id="thinkersAuto">
+						<td>
+							Thinker autobuyers
+						</td>
+						<td>
+							<button id="toggleAuto1" onclick="toggleAuto(1)" align="right">Tier 1</button>
+						</td>
+						<td>
+							<button id="toggleAuto2" onclick="toggleAuto(2)" align="right">Tier 2</button>
+						</td>
+						<td>
+							<button id="toggleAuto3" onclick="toggleAuto(3)" align="right">Tier 3</button>
+						</td>
+						<td>
+							<button id="toggleAuto4" onclick="toggleAuto(4)" align="right">Tier 4</button>
+						</td>
+						<td>
+							<button id="toggleAuto5" onclick="toggleAuto(5)" align="right">Tier 5</button>
+						</td>
+						<td>
+							<button id="toggleAuto6" onclick="toggleAuto(6)" align="right">Tier 6</button>
+						</td>
+						<td>
+							<button id="toggleAuto7" onclick="toggleAuto(7)" align="right">Tier 7</button>
+						</td>
+						<td>
+							<button id="toggleAuto8" onclick="toggleAuto(8)" align="right">Tier 8</button>
+						</td>
+					</tr>
+					<tr id="thinkersAuto">
+						<td>
+							Creator autobuyers
+						</td>
+						<td>
+							<button id="toggleAutoC1" onclick="toggleAutoC(1)" align="right">Tier 1</button>
+						</td>
+						<td>
+							<button id="toggleAutoC2" onclick="toggleAutoC(2)" align="right">Tier 2</button>
+						</td>
+						<td>
+							<button id="toggleAutoC3" onclick="toggleAutoC(3)" align="right">Tier 3</button>
+						</td>
+						<td>
+							<button id="toggleAutoC4" onclick="toggleAutoC(4)" align="right">Tier 4</button>
+						</td>
+					</tr>
+					<tr id="Existence mult auto">
+						<td>
+							<button id="toggleAutoEm" onclick="toggleAutoEm()" align="right">Existence Mult Autobuyer</button>
+						</td>
+					</tr>
+				</table>
+	        </div>
+		</div>
 		<div id="settings" class="tab" style="display: none">
 			<button id="saveButton" onclick="save()" class="storebtn">Save</button>
 			<button id="loadButton" onclick="load()" class="storebtn">Load</button>
@@ -240,5 +320,6 @@
 			<div style="display:none;position:fixed;left:0;top:0"><textarea id="exportOutput" style="color:black; width: 200px; height: 55px;"></textarea></div>
 	
 		</div>
+		<script src="canvas.js"></script>
 	</body>
 </html>

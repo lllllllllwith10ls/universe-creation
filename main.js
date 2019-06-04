@@ -7,6 +7,7 @@ function getDefaultSave() {
 		thinkers: [
 			"empty",
 			{
+				unlocked: true,
 				amount:new Decimal(0),
 				cost:new Decimal(10),
 				mult:new Decimal(1),
@@ -16,6 +17,7 @@ function getDefaultSave() {
 				superCostScale:new Decimal(0.5)
 			},
 			{
+				unlocked: false,
 				amount:new Decimal(0),
 				cost:new Decimal(100),
 				mult:new Decimal(1),
@@ -25,6 +27,7 @@ function getDefaultSave() {
 				superCostScale:new Decimal(0.5)
 			},
 			{
+				unlocked: false,
 				amount:new Decimal(0),
 				cost:new Decimal(10000),
 				mult:new Decimal(1),
@@ -34,6 +37,7 @@ function getDefaultSave() {
 				superCostScale:new Decimal(0.5)
 			},
 			{
+				unlocked: false,
 				amount:new Decimal(0),
 				cost:new Decimal(1000000),
 				mult:new Decimal(1),
@@ -43,6 +47,7 @@ function getDefaultSave() {
 				superCostScale:new Decimal(0.5)
 			},
 			{
+				unlocked: false,
 				amount:new Decimal(0),
 				cost:new Decimal(1e9),
 				mult:new Decimal(1),
@@ -52,6 +57,7 @@ function getDefaultSave() {
 				superCostScale:new Decimal(0.5)
 			},
 			{
+				unlocked: false,
 				amount:new Decimal(0),
 				cost:new Decimal(1e11),
 				mult:new Decimal(1),
@@ -61,6 +67,7 @@ function getDefaultSave() {
 				superCostScale:new Decimal(0.5)
 			},
 			{
+				unlocked: false,
 				amount:new Decimal(0),
 				cost:new Decimal(100),
 				mult:new Decimal(1),
@@ -70,6 +77,7 @@ function getDefaultSave() {
 				superCostScale:new Decimal(0.5)
 			},
 			{
+				unlocked: false,
 				amount:new Decimal(0),
 				cost:new Decimal(1000),
 				mult:new Decimal(1),
@@ -90,6 +98,7 @@ function getDefaultSave() {
 		tab: "s thinkers",
 		subtab: {
 			existence: "s existUpgrades",
+			existence: "s treeUpgrades",
 		},
 		things: new Decimal(0),
 		creators: [
@@ -100,7 +109,8 @@ function getDefaultSave() {
 				mult:new Decimal(1),
 				bought:new Decimal(0),
 				costMult:new Decimal(5),
-				costScale:new Decimal(5)
+				costScale:new Decimal(5),
+				superCostScale:new Decimal(1.5)
 			},
 			{
 				amount:new Decimal(0),
@@ -108,7 +118,8 @@ function getDefaultSave() {
 				mult:new Decimal(1),
 				bought:new Decimal(0),
 				costMult:new Decimal(10),
-				costScale:new Decimal(5)
+				costScale:new Decimal(5),
+				superCostScale:new Decimal(1.5)
 			},
 			{
 				amount:new Decimal(0),
@@ -116,7 +127,8 @@ function getDefaultSave() {
 				mult:new Decimal(1),
 				bought:new Decimal(0),
 				costMult:new Decimal(20),
-				costScale:new Decimal(5)
+				costScale:new Decimal(5),
+				superCostScale:new Decimal(1.5)
 			},
 			{
 				amount:new Decimal(0),
@@ -124,7 +136,8 @@ function getDefaultSave() {
 				mult:new Decimal(1),
 				bought:new Decimal(0),
 				costMult:new Decimal(50),
-				costScale:new Decimal(5)
+				costScale:new Decimal(5),
+				superCostScale:new Decimal(1.5)
 			}
 		],
 		space: new Decimal(0),
@@ -133,7 +146,13 @@ function getDefaultSave() {
 		manifoldCost: new Decimal(1),
 		manifoldCostMult: new Decimal(2),
 		manifoldCostScale: new Decimal(2),
+		manifoldCostScale2: new Decimal(2),
 		manifoldMult: new Decimal(1),
+		manifoldMult2: new Decimal(1),
+		treeUpgrades: [],
+		autos: [false,false,false,false,false,false,false,false],
+		autoCs: [false,false,false,false],
+		autoEm: false,
 	}
 }
 
@@ -146,6 +165,7 @@ function gameLoop() {
 	produce(diff);
 	update();
 	mults();
+	autoBuyers();
 }
 
 function produce(time) {
@@ -177,15 +197,20 @@ function update() {
 		if(i <= 6) {
 			if(player.creations.gte(i-1)) {
 				get("tier"+i).style.display = "";
+				player.thinkers[i].unlocked = true;
 			} else {
 				get("tier"+i).style.display = "none";
+				player.thinkers[i].unlocked = false;
 			}
+
 		} else {
 			if((player.exist.gte(player.thinkers[i].cost) || player.thinkers[i].amount.gt(0))&& player.creations.gte(5)) {
 				get("tier"+i).style.display = "";
 				unlocked7 = true;
+				player.thinkers[i].unlocked = true;
 			} else {
 				get("tier"+i).style.display = "none";
+				player.thinkers[i].unlocked = false;
 			}
 		}
 	}
@@ -262,9 +287,11 @@ function update() {
 
 	if(player.abstractions.gt(0)) {
 		get("abstractTab").style.display = "";
+		get("upgradeTreeTab").style.display = "";
 		get("space").innerHTML = format(player.space,true);
 	} else {
 		get("abstractTab").style.display = "none";
+		get("upgradeTreeTab").style.display = "none";
 	}
 	get("manifolds").innerHTML = format(player.manifolds,true);
 	get("manifoldCost").innerHTML = format(player.manifoldCost,true);
@@ -273,9 +300,63 @@ function update() {
 	} else {
 		get("buyManifold").className = "storebtnlocked";
 	}
+	if(player.treeUpgrades.includes("st11")) {
+		get("st11").className = "treebtn upgradebought";
+	} else if(canBuyTreeUpgrade("t11")) {
+		get("st11").className = "treebtn creationbtn";
+	} else {
+		get("st11").className = "treebtn storebtnlocked";
+	}
+	if(player.treeUpgrades.includes("st21")) {
+		get("st21").className = "treebtn upgradebought";
+	} else if(canBuyTreeUpgrade("t21")) {
+		get("st21").className = "treebtn creationbtn";
+	} else {
+		get("st21").className = "treebtn storebtnlocked";
+	}
+	if(player.treeUpgrades.includes("st22")) {
+		get("st22").className = "treebtn upgradebought";
+	} else if(canBuyTreeUpgrade("t22")) {
+		get("st22").className = "treebtn creationbtn";
+	} else {
+		get("st22").className = "treebtn storebtnlocked";
+	}
+	if(player.treeUpgrades.includes("st31")) {
+		get("st31").className = "smalltext treebtn upgradebought";
+		get("autobuyersSubtab").style.display = "";
+	} else if(canBuyTreeUpgrade("t31")) {
+		get("st31").className = "smalltext treebtn creationbtn";
+	} else {
+		get("st31").className = "smalltext treebtn storebtnlocked";
+	}
+	resizeCanvas();
+	for(let i = 0; i < player.autos.length; i++) {
+		if(player.autos[i]) {
+			get("toggleAuto"+(i+1)).className = "storebtn";
+		} else {
+			get("toggleAuto"+(i+1)).className = "storebtnlocked";
+		}
+	}
+	for(let i = 0; i < player.autoCs.length; i++) {
+		if(player.autoCs[i]) {
+			get("toggleAutoC"+(i+1)).className = "creationbtn";
+		} else {
+			get("toggleAutoC"+(i+1)).className = "storebtnlocked";
+		}
+	}
+	if(player.autoEm) {
+		get("toggleAutoEm").className = "creationbtn";
+	} else {
+		get("toggleAutoEm").className = "storebtnlocked";
+	}
 }
 function mults() {
 	player.manifoldMult = new Decimal(1.2).pow(player.manifolds);
+	player.manifoldMult2 = new Decimal(1.05).pow(player.manifolds.cbrt());
+	if(player.treeUpgrades.includes("st22")) {
+		player.manifoldMult = player.manifoldMult.pow(1.5);
+		player.manifoldMult2 = player.manifoldMult2.pow(1.5);
+	}
 	for(let i = 1; i <= 8; i++) {
 		if(player.upgrades.includes("s11")) {
 			player.thinkers[i].mult = (player.manifoldMult.times(1.02)).pow(player.thinkers[i].bought);
@@ -283,12 +364,16 @@ function mults() {
 			player.thinkers[i].mult = (player.manifoldMult.times(1.01)).pow(player.thinkers[i].bought);
 		}
 		if(player.upgrades.includes("s21")) {
-			player.thinkers[i].mult = player.thinkers[i].mult.times(player.creations.cbrt());
+			player.thinkers[i].mult = player.thinkers[i].mult.times(player.creations.cbrt().plus(1));
 		}
 		player.thinkers[i].mult = player.thinkers[i].mult.times(player.things.sqr().add(1));
 	}
 	for(let i = 1; i <= 4; i++) {
-		player.creators[i].mult = new Decimal(1.1).pow(player.creators[i].bought);
+		if(player.treeUpgrades.includes("st11")) {
+			player.creators[i].mult = player.manifoldMult2.times(1.1).pow(player.creators[i].bought);
+		} else {
+			player.creators[i].mult = new Decimal(1.1).pow(player.creators[i].bought);
+		}
 	}
 }
 function existOnCreate() {
@@ -320,9 +405,9 @@ function buyTier(tier) {
 	}
 }
 function canBuyTier(tier) {
-	if(player.ideas.gte(player.thinkers[tier].cost) && tier <= 6) {
+	if(player.ideas.gte(player.thinkers[tier].cost) && tier <= 6 && player.thinkers[tier].unlocked) {
 		return true;
-	} else if(player.exist.gte(player.thinkers[tier].cost) && tier > 6) {
+	} else if(player.exist.gte(player.thinkers[tier].cost) && tier > 6 && player.thinkers[tier].unlocked) {
 		return true;
 	} else {
 		return false
@@ -330,11 +415,11 @@ function canBuyTier(tier) {
 }
 function buyMaxTier(tier) {
 	if(tier <= 6) {
-		while(player.ideas.gte(player.thinkers[tier].cost)) {
+		while(canBuyTier(tier)) {
 			buyTier(tier);
 		}
 	} else {
-		while(player.exist.gte(player.thinkers[tier].cost)) {
+		while(canBuyTier(tier)) {
 			buyTier(tier);
 		}
 	}
@@ -359,6 +444,9 @@ function buyTierC(tier) {
 		player.creators[tier].bought = player.creators[tier].bought.add(1);
 		if(player.creators[tier].cost.gte(1e9)) {
 			player.creators[tier].costMult = player.creators[tier].costMult.times(player.creators[tier].costScale);
+		}
+		if(player.creators[tier].cost.gte(1e300)) {
+			player.creators[tier].costScale = player.creators[tier].costScale.times(player.creators[tier].superCostScale);
 		}
 	}
 }
@@ -394,8 +482,35 @@ function upgradeCost(upgrade) {
 		case "22":
 			cost = new Decimal(100);
 			break;
+		case "t11":
+			cost = new Decimal(100);
+			break;
+		case "t21":
+			cost = new Decimal(1e9);
+			break;
+		case "t22":
+			cost = new Decimal(1e9);
+			break;
+		case "t31":
+			cost = new Decimal(1e33);
+			break;
 	}
 	return cost;
+}
+function upgradeUnlock(upgrade) {
+	let unlock = ["none"];
+	switch(upgrade) {
+		case "t21":
+			unlock = ["st11"];
+			break;
+		case "t22":
+			unlock = ["st11"];
+			break;
+		case "t31":
+			unlock = ["st21","st22"];
+			break;
+	}
+	return unlock;
 }
 function canBuyUpgrade(upgrade) {
 	let cost = upgradeCost(upgrade);
@@ -404,6 +519,34 @@ function canBuyUpgrade(upgrade) {
 		return true;
 	}
 	return false;
+}
+
+function canBuyUpgrade(upgrade) {
+	let cost = upgradeCost(upgrade);
+	
+	if(player.exist.gte(cost)) {
+		return true;
+	}
+	return false;
+}
+function canBuyTreeUpgrade(upgrade) {
+	if(!player.treeUpgrades.includes("s"+upgrade)) {
+		let cost = upgradeCost(upgrade);
+		
+		if(player.space.gte(cost) && (upgradeUnlock(upgrade).every(val => player.treeUpgrades.includes(val)) || upgradeUnlock(upgrade)[0] === "none")) {
+			return true;
+		}
+		return false;
+	}
+}
+function buyTreeUpgrade(upgrade) {
+	if(canBuyTreeUpgrade(upgrade) && !player.treeUpgrades.includes("s"+upgrade)) {
+		player.treeUpgrades.push("s"+upgrade);
+		
+		if(upgrade === "t21") {
+			rebuyManifolds();
+		}
+	}
 }
 function buyUpgrade(upgrade) {
 	if(canBuyUpgrade(upgrade) && !player.upgrades.includes("s"+upgrade)) {
@@ -455,14 +598,47 @@ function canBuyManifold() {
 		return false
 	}
 }
-function buyManifold() {
-	if(canBuyManifold()) {
+function buyManifold(free = false) {
+	if(free) {
+		player.manifolds = player.manifolds.add(1);
+		player.manifoldCost = player.manifoldCost.times(player.manifoldCostMult);
+		if(player.manifoldCost.gte(16)) {
+			if(player.treeUpgrades.includes("st21")) {
+				player.manifoldCostMult = player.manifoldCostMult.times(player.manifoldCostScale.div(1.5));
+			} else {
+				player.manifoldCostMult = player.manifoldCostMult.times(player.manifoldCostScale);
+			}
+		}
+		if(player.manifoldCost.gte(1e20)) {
+			player.manifoldCostScale = player.manifoldCostScale.times(player.manifoldCostScale2);
+		}
+	} else if(canBuyManifold()) {
 		player.space = player.space.sub(player.manifoldCost);
 		player.manifolds = player.manifolds.add(1);
 		player.manifoldCost = player.manifoldCost.times(player.manifoldCostMult);
 		if(player.manifoldCost.gte(16)) {
-			player.manifoldCostMult = player.manifoldCostMult.times(player.manifoldCostScale);
+			if(player.treeUpgrades.includes("st21")) {
+				player.manifoldCostMult = player.manifoldCostMult.times(player.manifoldCostScale.div(1.5));
+			} else {
+				player.manifoldCostMult = player.manifoldCostMult.times(player.manifoldCostScale);
+			}
 		}
+		if(player.manifoldCost.gte(1e20)) {
+			player.manifoldCostScale = player.manifoldCostScale.times(player.manifoldCostScale2);
+		}
+	}
+}
+function rebuyManifolds() {
+	let manifolds = player.manifolds;
+	player.manifolds = new Decimal(0);
+	player.manifoldCost = new Decimal(1);
+	player.manifoldCostMult = new Decimal(2);
+	player.manifoldCostScale = new Decimal(2);
+	player.manifoldCostScale2 = new Decimal(2);
+	player.manifoldMult = new Decimal(1);
+	while(manifolds.gt(0)) {
+		buyManifold(true);
+		manifolds = manifolds.minus(1);
 	}
 }
 function abstract() {
@@ -495,16 +671,60 @@ function abstract() {
 	player.abstractions = player.abstractions.add(1);
 	player.creations = new Decimal(0);
 	player.things = new Decimal(0);
-	player.upgrades = [];
+	if(!player.treeUpgrades.includes("st31")) {
+		player.upgrades = [];
+	}
 	player.existMult = new Decimal(1);
 	player.existMultCost = new Decimal(2);
 	player.existMultCostMult = new Decimal(2);
 	player.existMultCostScale = new Decimal(1.5);
+	player.subtab.existence = "s existUpgrades";
+}
+function toggleAuto(tier) {
+	if(player.autos[tier-1]) {
+		player.autos[tier-1] = false;
+	} else {
+		player.autos[tier-1] = true;
+	}
+}
+function toggleAutoC(tier) {
+	if(player.autoCs[tier-1]) {
+		player.autoCs[tier-1] = false;
+	} else {
+		player.autoCs[tier-1] = true;
+	}
+}
+function toggleAutoEm(tier) {
+	if(player.autoEm) {
+		player.autoEm = false;
+	} else {
+		player.autoEm = true;
+	}
+}
+
+function autoBuyers() {
+	for(let i = 0; i < player.autos.length; i++) {
+		if(player.autos[i]) {
+			buyMaxTier(i+1);
+		}
+	}
+	for(let i = 0; i < player.autoCs.length; i++) {
+		if(player.autoCs[i]) {
+			buyMaxTierC(i+1);
+		}
+	}
+	if(player.autoEm) {
+		while(canBuyUpgrade("12")) {
+			buyUpgrade("12");
+		}
+	}
 }
 function start() {
 	setInterval(gameLoop, 33);
 	load();
 	showTab(player.tab.substr(2));
+	window.addEventListener("resize", resizeCanvas);
+	resizeCanvas();
 }
 function showTab(tab) {
 	let tabs = document.getElementsByClassName("tab");
