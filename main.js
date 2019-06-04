@@ -486,10 +486,10 @@ function upgradeCost(upgrade) {
 			cost = new Decimal(100);
 			break;
 		case "t21":
-			cost = new Decimal(1e9);
+			cost = new Decimal(1e8);
 			break;
 		case "t22":
-			cost = new Decimal(1e9);
+			cost = new Decimal(1e8);
 			break;
 		case "t31":
 			cost = new Decimal(1e33);
