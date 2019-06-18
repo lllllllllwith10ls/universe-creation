@@ -109,7 +109,7 @@ function getDefaultSave() {
 				cost:new Decimal(100),
 				mult:new Decimal(1),
 				bought:new Decimal(0),
-				costMult:new Decimal(5),
+				costMult:new Decimal(10),
 				costScale:new Decimal(5),
 				superCostScale:new Decimal(1.5)
 			},
@@ -118,7 +118,7 @@ function getDefaultSave() {
 				cost:new Decimal(1000),
 				mult:new Decimal(1),
 				bought:new Decimal(0),
-				costMult:new Decimal(10),
+				costMult:new Decimal(100),
 				costScale:new Decimal(5),
 				superCostScale:new Decimal(1.5)
 			},
@@ -127,7 +127,7 @@ function getDefaultSave() {
 				cost:new Decimal(100000),
 				mult:new Decimal(1),
 				bought:new Decimal(0),
-				costMult:new Decimal(20),
+				costMult:new Decimal(1000),
 				costScale:new Decimal(5),
 				superCostScale:new Decimal(1.5)
 			},
@@ -136,7 +136,7 @@ function getDefaultSave() {
 				cost:new Decimal(10000000),
 				mult:new Decimal(1),
 				bought:new Decimal(0),
-				costMult:new Decimal(50),
+				costMult:new Decimal(10000),
 				costScale:new Decimal(5),
 				superCostScale:new Decimal(1.5)
 			}
@@ -426,8 +426,8 @@ function mults() {
 		player.manifoldMult = player.manifoldMult.pow(1.5);
 		player.manifoldMult2 = player.manifoldMult2.pow(1.5);
 	}
-	player.manifoldMult = player.manifoldMult.times(player.gravityWaves.add(2).log(1.1));
-	player.manifoldMult2 = player.manifoldMult2.times(player.gravityWaves.add(2).log(1.1));
+	player.manifoldMult = player.manifoldMult.times(player.gravityWaves.add(1.1).log(1.1));
+	player.manifoldMult2 = player.manifoldMult2.times(player.gravityWaves.add(1.1).log(1.1));
 	for(let i = 1; i <= 8; i++) {
 		if(player.upgrades.includes("s11")) {
 			player.thinkers[i].mult = (player.manifoldMult.times(1.02)).pow(player.thinkers[i].bought);
@@ -559,22 +559,22 @@ function upgradeCost(upgrade) {
 			cost = new Decimal(10);
 			break;
 		case "22":
-			cost = new Decimal(100);
+			cost = new Decimal(1000);
 			break;
 		case "t11":
 			cost = new Decimal(100);
 			break;
 		case "t21":
-			cost = new Decimal(1e8);
+			cost = new Decimal(1e7);
 			break;
 		case "t22":
-			cost = new Decimal(1e8);
+			cost = new Decimal(1e7);
 			break;
 		case "t31":
-			cost = new Decimal(1e33);
+			cost = new Decimal(1e20);
 			break;
 		case "t41":
-			cost = new Decimal(1e35);
+			cost = new Decimal(1e30);
 			break;
 		case "g11":
 			cost = player.gravityRebuyableCosts[0];
@@ -640,14 +640,14 @@ function canBuyTreeUpgrade(upgrade) {
 }
 function buyTreeUpgrade(upgrade) {
 	if(canBuyTreeUpgrade(upgrade) && !player.treeUpgrades.includes("s"+upgrade)) {
+		player.space = player.space.sub(upgradeCost(upgrade));
 		
+		player.treeUpgrades.push("s"+upgrade);
 		if(upgrade === "t21") {
 			rebuyManifolds();
 		} else if(upgrade === "t41") {
 			showTab("abstract");
-			showSubTab("gravity","abstract");
-		} else {
-			player.gravityUpgrades.push("s"+upgrade);
+			showSubtab("gravity","abstract");
 		}
 	}
 }
@@ -681,30 +681,15 @@ function buyGravUpgrade(upgrade) {
 }
 function creation() {
 	player.exist = player.exist.add(existOnCreate());
-	player.ideas = new Decimal(10);
+	player.ideas = getDefaultSave().ideas;
 	for(let i = 1; i <= 6; i++) {
-		player.thinkers[i].amount = new Decimal(0);
-		player.thinkers[i].bought = new Decimal(0);
-		player.thinkers[i].costScale = new Decimal(1.5);
+		player.thinkers[i] = getDefaultSave().thinkers[i];
 	}
-	player.thinkers[1].cost = new Decimal(10);
-	player.thinkers[2].cost = new Decimal(100);
-	player.thinkers[3].cost = new Decimal(10000);
-	player.thinkers[4].cost = new Decimal(1000000);
-	player.thinkers[5].cost = new Decimal(1e9);
-	player.thinkers[6].cost = new Decimal(1e11);
-	
-	player.thinkers[1].costMult = new Decimal(1.15);
-	player.thinkers[2].costMult = new Decimal(1.2);
-	player.thinkers[3].costMult = new Decimal(1.3);
-	player.thinkers[4].costMult = new Decimal(1.35);
-	player.thinkers[5].costMult = new Decimal(1.375);
-	player.thinkers[6].costMult = new Decimal(1.4);
 	player.creations = player.creations.add(1);
 }
 
 function spaceOnAbstract() {
-	return new Decimal(2).pow((player.exist.add(existOnCreate()).add(1)).log2().div(Math.log2(1e4)).sub(9));
+	return new Decimal(2).pow((player.exist.add(existOnCreate()).add(1)).log2().div(Math.log2(1e4)).sub(8));
 }
 
 function canBuyManifold() {
@@ -746,12 +731,12 @@ function buyManifold(free = false) {
 }
 function rebuyManifolds() {
 	let manifolds = player.manifolds;
-	player.manifolds = new Decimal(0);
-	player.manifoldCost = new Decimal(1);
-	player.manifoldCostMult = new Decimal(2);
-	player.manifoldCostScale = new Decimal(2);
-	player.manifoldCostScale2 = new Decimal(2);
-	player.manifoldMult = new Decimal(1);
+	player.manifolds = getDefaultSave().manifolds;
+	player.manifoldCost = getDefaultSave().manifoldCost;
+	player.manifoldCostMult = getDefaultSave().manifoldCostMult;
+	player.manifoldCostScale = getDefaultSave().manifoldCostScale;
+	player.manifoldCostScale2 = getDefaultSave().manifoldCostScale2;
+	player.manifoldMult = getDefaultSave().manifoldMult;
 	while(manifolds.gt(0)) {
 		buyManifold(true);
 		manifolds = manifolds.minus(1);
@@ -766,40 +751,21 @@ function abstract(grav = false) {
 	}
 	player.gravityWell = grav;
 	player.space = player.space.add(spaceOnAbstract());
-	player.exist = new Decimal(0);
-	for(let i = 7; i <= 8; i++) {
-		player.thinkers[i].amount = new Decimal(0);
-		player.thinkers[i].bought = new Decimal(0);
-		player.thinkers[i].costScale = new Decimal(1.5);
-	}
-	for(let i = 1; i <= 4; i++) {
-		player.creators[i].amount = new Decimal(0);
-		player.creators[i].bought = new Decimal(0);
-		player.creators[i].costScale = new Decimal(5);
-	}
-	player.thinkers[7].cost = new Decimal(10);
-	player.thinkers[8].cost = new Decimal(100);
-	player.creators[1].cost = new Decimal(100);
-	player.creators[2].cost = new Decimal(1000);
-	player.creators[3].cost = new Decimal(100000);
-	player.creators[4].cost = new Decimal(10000000);
-	
-	player.thinkers[7].costMult = new Decimal(1.41);
-	player.thinkers[8].costMult = new Decimal(1.42);
-	player.creators[1].costMult = new Decimal(5);
-	player.creators[2].costMult = new Decimal(10);
-	player.creators[3].costMult = new Decimal(20);
-	player.creators[4].costMult = new Decimal(50);
+	player.exist = getDefaultSave().exist;
+
+	player.thinkers[7] = getDefaultSave().thinkers[7];
+	player.thinkers[8] = getDefaultSave().thinkers[8];
+	player.creators = getDefaultSave().creators;
 	player.abstractions = player.abstractions.add(1);
-	player.creations = new Decimal(0);
-	player.things = new Decimal(0);
+	player.creations = getDefaultSave().creations;
+	player.things = getDefaultSave().things;
 	if(!player.treeUpgrades.includes("st31")) {
-		player.upgrades = [];
+		player.upgrades = getDefaultSave().upgrades;
 	}
-	player.existMult = new Decimal(1);
-	player.existMultCost = new Decimal(2);
-	player.existMultCostMult = new Decimal(2);
-	player.existMultCostScale = new Decimal(1.5);
+	player.existMult = getDefaultSave().existMult;
+	player.existMultCost = getDefaultSave().existMultCost;
+	player.existMultCostMult = getDefaultSave().existMultCostMult;
+	player.existMultCostScale = getDefaultSave().existMultCostScale;
 	player.subtab.existence = "s existUpgrades";
 	
 }
