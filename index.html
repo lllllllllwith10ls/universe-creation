@@ -133,7 +133,7 @@
 				</tbody>
 			</table>
 			<button class="creationbtn" style="display: none; margin: auto;" onclick="creation()" id="creation">Create some things<br/> Gain <span id="existOnCreate">0</span> existence</button>
-			<button class="creationbtn" style="display: none; margin: auto;" onclick="abstract()" id="abstraction">Abstract things<br/> Gain <span id="spaceOnAbstract">0</span> space</button>
+			<button class="creationbtn" style="display: none; margin: auto;" onclick="abstract()" id="abstraction">Abstract things<br/> Gain 0 space</button>
 		</div>
 		<div id="existence" class="tab" style="display: none">
 			<p>You have <span id="exist">0</span> existence</p>
@@ -227,35 +227,73 @@
 			</div>
 		</div>
 		<div id="abstract" class="tab" style="display: none">
-			<p>You have <span id="space">0</span> space</p>
-			<p>Manifolds: <span id="manifolds">0</span></p>
-			<button id="buyManifold" onclick="buyManifold()" align="right">Buy manifold for a thinker multiplier<br/>Cost: <span id="manifoldCost">1</span> space</button>
-			
+			<button id="manifoldsSubtab" onclick="showSubtab('manifoldsTab','abstract')" class="storebtn">Manifolds</button>
+			<button id="gravitySubtab" onclick="showSubtab('gravity','abstract')" style="display: none" class="storebtn">Gravity Well</button>
+			<div id="manifoldsTab" class="subtab">
+				<p>You have <span id="space">0</span> space</p>
+				<p>Manifolds: <span id="manifolds">0</span></p>
+				<button id="buyManifold" onclick="buyManifold()" align="right">Buy manifold for a thinker multiplier<br/>Cost: <span id="manifoldCost">1</span> space</button>
+			</div>
+			<div id="gravity" class="subtab">
+				<p>You have <span id="gravitonAmount">0</span> gravitons</p>
+				<table>
+					<tr>
+						<td>
+							<button id="gravityWell" class="gravitybtn" onclick="gravityWell()">Enter the Gravity Well</button>
+						</td>
+					</tr>
+				</table>
+				<p>You have <span id="gravityWaves">0</span> gravity waves, which make manifolds <span id="manifoldMult">1</span>x better</p>
+				<table>
+					<tr>
+						<td>
+							<button id="sg11" class="gravitybtn upgradebtn" onclick="buyGravUpgrade('g11')">Earn 2x more gravity waves<br/>Cost: <span id="sg11cost">1e5</span> gravity waves</button>
+						</td>
+						<td>
+							<button id="sg12" class="gravitybtn upgradebtn" onclick="buyGravUpgrade('g12')">Earn 3x more gravitons<br/>Cost: <span id="sg12cost">1e8</span> gravity waves</button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<button id="sg21" class="gravitybtn upgradebtn" onclick="buyGravUpgrade('g21')">Reduce thinker cost scaling<br/>Cost: 1e7 gravity waves</button>
+						</td>
+						<td>
+							<button id="sg22" class="gravitybtn upgradebtn" onclick="buyGravUpgrade('g22')">Reduce gravity well penalty<br/>Cost: 1e8 gravity waves</button>
+						</td>
+					</tr>
+				</table>
+			</div>
 		</div>
 		<div id="upgradeTree" class="tab" style="display: none">
 			<button id="treeUpgradesSubtab" onclick="showSubtab('treeUpgrades','upgradeTree')" class="storebtn">Upgrades</button>
 			<button id="autobuyersSubtab" onclick="showSubtab('autobuyers','upgradeTree')" style="display: none" class="storebtn">Autobuyers</button>
 			<div id="treeUpgrades" class="subtab">
 				<canvas id="treeCanvas"></canvas>
-	            <table id="upgradeTable" style="display: flex; justify-content: center">
-	                <tr>
-	                    <td><button class="upgradebtn creationbtn" id="st11" onclick="buyTreeUpgrade('t11')">Manifolds affect creators at a reduced rate.<br/>Cost: 100 space</button></td>
-	                </tr>
-	            </table>
-	            <table id="upgradeTable" style="display: flex; justify-content: center">
-	                <tr>
-	                    <td><button class="treebtn creationbtn" id="st21" onclick="buyTreeUpgrade('t21')">Manifold cost scaling is 1.5 times weaker<br/>Cost: 1e8 space</button></td>
-	                	<td><button class="treebtn creationbtn" id="st22" onclick="buyTreeUpgrade('t22')">Manifolds are raised to the power of 1.5<br/>Cost: 1e8 space</button></td>
-	                </tr>
-	            </table>
-	            <table id="upgradeTable" style="display: flex; justify-content: center">
-	                <tr>
-	                    <td><button class="upgradebtn creationbtn" id="st31" onclick="buyTreeUpgrade('t31')">
-	                    Unlock autobuyers, and have all existence upgrades unlocked at the start of each abstract<br/>Cost: 1e33 space</button></td>
-	                </tr>
-	            </table>
-	        </div>
-	        <div id="autobuyers" style="display: none" class="subtab">
+				<table id="upgradeTable" style="display: flex; justify-content: center">
+					<tr>
+						<td><button class="upgradebtn creationbtn" id="st11" onclick="buyTreeUpgrade('t11')">Manifolds affect creators at a reduced rate.<br/>Cost: 100 space</button></td>
+					</tr>
+				</table>
+				<table id="upgradeTable" style="display: flex; justify-content: center">
+					<tr>
+						<td><button class="treebtn creationbtn" id="st21" onclick="buyTreeUpgrade('t21')">Manifold cost scaling is 1.5 times weaker<br/>Cost: 1e8 space</button></td>
+						<td><button class="treebtn creationbtn" id="st22" onclick="buyTreeUpgrade('t22')">Manifolds are raised to the power of 1.5<br/>Cost: 1e8 space</button></td>
+					</tr>
+				</table>
+				<table id="upgradeTable" style="display: flex; justify-content: center">
+					<tr>
+						<td><button class="upgradebtn creationbtn" id="st31" onclick="buyTreeUpgrade('t31')">
+						Unlock autobuyers, and have all existence upgrades unlocked at the start of each abstract<br/>Cost: 1e33 space</button></td>
+					</tr>
+				</table>
+				<table id="upgradeTable" style="display: flex; justify-content: center">
+					<tr>
+						<td><button class="upgradebtn creationbtn" id="st41" onclick="buyTreeUpgrade('t41')">
+						Unlock the gravity well<br/>Cost: 1e35 space</button></td>
+					</tr>
+				</table>
+			</div>
+			<div id="autobuyers" style="display: none" class="subtab">
 				<table>
 					<tr id="thinkersAuto">
 						<td>
@@ -309,7 +347,7 @@
 						</td>
 					</tr>
 				</table>
-	        </div>
+			</div>
 		</div>
 		<div id="settings" class="tab" style="display: none">
 			<button id="saveButton" onclick="save()" class="storebtn">Save</button>

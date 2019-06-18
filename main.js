@@ -98,7 +98,8 @@ function getDefaultSave() {
 		tab: "s thinkers",
 		subtab: {
 			existence: "s existUpgrades",
-			existence: "s treeUpgrades",
+			upgradeTree: "s treeUpgrades",
+			abstract: "s manifoldsTab",
 		},
 		things: new Decimal(0),
 		creators: [
@@ -153,6 +154,12 @@ function getDefaultSave() {
 		autos: [false,false,false,false,false,false,false,false],
 		autoCs: [false,false,false,false],
 		autoEm: false,
+		gravityWell: false,
+		gravitons: new Decimal(0),
+		gravityWaves: new Decimal(0),
+		gravityUpgrades: [],
+		gravityRebuyables: [new Decimal(0),new Decimal(0)],
+		gravityRebuyableCosts: [new Decimal(1e5),new Decimal(1e7)],
 	}
 }
 
@@ -178,6 +185,7 @@ function produce(time) {
 	for(let i = 1; i < 4; i++) {
 		player.creators[i].amount = player.creators[i+1].amount.times(time).times(player.creators[i+1].mult).add(player.creators[i].amount);
 	}
+	player.gravityWaves = player.gravityWaves.add(player.gravitons.sqr().times(Decimal.pow(2,player.gravityRebuyables[0])));
 }
 
 function update() {
@@ -278,11 +286,19 @@ function update() {
 			get("buyMaxTier"+i+"C").className = "storebtnlocked";
 		}
 	}
-	if(spaceOnAbstract().gte(1)) {
+	if(spaceOnAbstract().gte(1) && !player.gravityWell) {
 		get("abstraction").style.display = "";
-		get("spaceOnAbstract").innerHTML = format(spaceOnAbstract(),true);
-	} else {
+		get("abstraction").innerHTML = "Abstract things<br/> Gain " + format(spaceOnAbstract(),true) + " space";
+	} else if(spaceOnAbstract().lt(1)) {
 		get("abstraction").style.display = "none";
+	} else {
+		if(getGravGain().gte(player.gravitons)) {
+			get("abstraction").style.display = "";
+			get("abstraction").innerHTML = "Abstract things<br/> Gain " + format(getGravGain().minus(player.gravitons),true) + " gravitons";
+		} else {
+			get("abstraction").style.display = "";
+			get("abstraction").innerHTML = "Reach " + format(reverseGravGain(player.gravitons),true) + " existence";
+		}
 	}
 
 	if(player.abstractions.gt(0)) {
@@ -329,6 +345,14 @@ function update() {
 	} else {
 		get("st31").className = "smalltext treebtn storebtnlocked";
 	}
+	if(player.treeUpgrades.includes("st41")) {
+		get("st41").className = "smalltext treebtn upgradebought";
+		get("gravitySubtab").style.display = "";
+	} else if(canBuyTreeUpgrade("t41")) {
+		get("st41").className = "smalltext treebtn creationbtn";
+	} else {
+		get("st41").className = "smalltext treebtn storebtnlocked";
+	}
 	resizeCanvas();
 	for(let i = 0; i < player.autos.length; i++) {
 		if(player.autos[i]) {
@@ -349,14 +373,61 @@ function update() {
 	} else {
 		get("toggleAutoEm").className = "storebtnlocked";
 	}
+	get("gravitonAmount").innerHTML = format(player.gravitons,true);
+	get("gravityWaves").innerHTML = format(player.gravityWaves,true);
+	get("manifoldMult").innerHTML = format(player.gravityWaves.add(2).log2());
+
+	if(canBuyGravUpgrade("g11")) {
+		get("sg11").className = "upgradebtn gravitybtn";
+	} else {
+		get("sg11").className = "upgradebtn storebtnlocked";
+	}
+	get("sg11cost").innerHTML = format(player.gravityRebuyableCosts[0],true);
+	get("sg12cost").innerHTML = format(player.gravityRebuyableCosts[1],true);
+	if(canBuyGravUpgrade("g12")) {
+		get("sg12").className = "upgradebtn gravitybtn";
+	} else {
+		get("sg12").className = "upgradebtn storebtnlocked";
+	}
+	if(player.gravityUpgrades.includes("sg21")) {
+		get("sg21").className = "upgradebtn upgradebought";
+	} else if(canBuyGravUpgrade("g21")) {
+		get("sg21").className = "upgradebtn gravitybtn";
+	} else {
+		get("sg21").className = "upgradebtn storebtnlocked";
+	}
+	if(player.gravityUpgrades.includes("sg22")) {
+		get("sg22").className = "upgradebtn upgradebought";
+	} else if(canBuyGravUpgrade("g22")) {
+		get("sg22").className = "upgradebtn gravitybtn";
+	} else {
+		get("sg22").className = "upgradebtn storebtnlocked";
+	}
+	if(player.gravityWell) {
+		get("gravityWell").innerHTML = "Exit the Gravity Well";
+	} else {
+		get("gravityWell").innerHTML = "Enter the Gravity Well";
+	}
 }
 function mults() {
+	gravityMult = new Decimal(1);
+	if(player.gravityWell) {
+		if(player.gravityUpgrades.includes("sg22")) {
+			gravityMult = player.ideas.root(1.2);
+		} else {
+			gravityMult = player.ideas.root(1.1);
+		}
+	} else {
+
+	}
 	player.manifoldMult = new Decimal(1.2).pow(player.manifolds);
 	player.manifoldMult2 = new Decimal(1.05).pow(player.manifolds.cbrt());
 	if(player.treeUpgrades.includes("st22")) {
 		player.manifoldMult = player.manifoldMult.pow(1.5);
 		player.manifoldMult2 = player.manifoldMult2.pow(1.5);
 	}
+	player.manifoldMult = player.manifoldMult.times(player.gravityWaves.add(2).log(1.1));
+	player.manifoldMult2 = player.manifoldMult2.times(player.gravityWaves.add(2).log(1.1));
 	for(let i = 1; i <= 8; i++) {
 		if(player.upgrades.includes("s11")) {
 			player.thinkers[i].mult = (player.manifoldMult.times(1.02)).pow(player.thinkers[i].bought);
@@ -367,6 +438,7 @@ function mults() {
 			player.thinkers[i].mult = player.thinkers[i].mult.times(player.creations.cbrt().plus(1));
 		}
 		player.thinkers[i].mult = player.thinkers[i].mult.times(player.things.sqr().add(1));
+		player.thinkers[i].mult = player.thinkers[i].mult.div(gravityMult);
 	}
 	for(let i = 1; i <= 4; i++) {
 		if(player.treeUpgrades.includes("st11")) {
@@ -374,6 +446,7 @@ function mults() {
 		} else {
 			player.creators[i].mult = new Decimal(1.1).pow(player.creators[i].bought);
 		}
+		player.creators[i].mult = player.creators[i].mult.div(gravityMult);
 	}
 }
 function existOnCreate() {
@@ -389,6 +462,9 @@ function buyTier(tier) {
 			player.thinkers[tier].costMult = player.thinkers[tier].costMult.times(player.thinkers[tier].costScale);
 			if(player.thinkers[tier].cost.gte(1e50)) {
 				player.thinkers[tier].costScale = player.thinkers[tier].costScale.add(player.thinkers[tier].superCostScale);
+				if(player.gravityUpgrades.includes("sg21")) {
+					player.thinkers[tier].costScale = player.thinkers[tier].costScale.minus(0.5);
+				}
 			}
 		}
 	} else if(canBuyTier(tier) && tier >= 7) {
@@ -400,6 +476,9 @@ function buyTier(tier) {
 			player.thinkers[tier].costMult = player.thinkers[tier].costMult.times(player.thinkers[tier].costScale);
 			if(player.thinkers[tier].cost.gte(1e9)) {
 				player.thinkers[tier].costScale = player.thinkers[tier].costScale.add(player.thinkers[tier].superCostScale);
+				if(player.gravityUpgrades.includes("sg21")) {
+					player.thinkers[tier].costScale = player.thinkers[tier].costScale.minus(0.5);
+				}
 			}
 		}
 	}
@@ -494,6 +573,21 @@ function upgradeCost(upgrade) {
 		case "t31":
 			cost = new Decimal(1e33);
 			break;
+		case "t41":
+			cost = new Decimal(1e35);
+			break;
+		case "g11":
+			cost = player.gravityRebuyableCosts[0];
+			break;
+		case "g12":
+			cost = player.gravityRebuyableCosts[1];
+			break;
+		case "g21":
+			cost = new Decimal(1e7);
+			break;
+		case "g22":
+			cost = new Decimal(1e8);
+			break;
 	}
 	return cost;
 }
@@ -509,6 +603,9 @@ function upgradeUnlock(upgrade) {
 		case "t31":
 			unlock = ["st21","st22"];
 			break;
+		case "t41":
+			unlock = ["st31"];
+			break;
 	}
 	return unlock;
 }
@@ -521,13 +618,15 @@ function canBuyUpgrade(upgrade) {
 	return false;
 }
 
-function canBuyUpgrade(upgrade) {
-	let cost = upgradeCost(upgrade);
+function canBuyGravUpgrade(upgrade) {
+	if(!player.gravityUpgrades.includes("s"+upgrade)) {
+		let cost = upgradeCost(upgrade);
 	
-	if(player.exist.gte(cost)) {
-		return true;
+		if(player.gravityWaves.gte(cost)) {
+			return true;
+		}
+		return false;
 	}
-	return false;
 }
 function canBuyTreeUpgrade(upgrade) {
 	if(!player.treeUpgrades.includes("s"+upgrade)) {
@@ -541,10 +640,14 @@ function canBuyTreeUpgrade(upgrade) {
 }
 function buyTreeUpgrade(upgrade) {
 	if(canBuyTreeUpgrade(upgrade) && !player.treeUpgrades.includes("s"+upgrade)) {
-		player.treeUpgrades.push("s"+upgrade);
 		
 		if(upgrade === "t21") {
 			rebuyManifolds();
+		} else if(upgrade === "t41") {
+			showTab("abstract");
+			showSubTab("gravity","abstract");
+		} else {
+			player.gravityUpgrades.push("s"+upgrade);
 		}
 	}
 }
@@ -562,7 +665,20 @@ function buyUpgrade(upgrade) {
 		}
 	}
 }
-
+function buyGravUpgrade(upgrade) {
+	if(canBuyGravUpgrade(upgrade) && !player.upgrades.includes("s"+upgrade)) {
+		player.gravityWaves = player.gravityWaves.sub(upgradeCost(upgrade));
+		if(upgrade === "g11") {
+			player.gravityRebuyableCosts[0] = player.gravityRebuyableCosts[0].times(1e3);
+			player.gravityRebuyables[0] = player.gravityRebuyables[0].add(1);
+		} else if(upgrade === "g12") {
+			player.gravityRebuyableCosts[1] = player.gravityRebuyableCosts[1].times(1e5);
+			player.gravityRebuyables[1] = player.gravityRebuyables[1].add(1);
+		} else {
+			player.gravityUpgrades.push("s"+upgrade);
+		}
+	}
+}
 function creation() {
 	player.exist = player.exist.add(existOnCreate());
 	player.ideas = new Decimal(10);
@@ -641,8 +757,14 @@ function rebuyManifolds() {
 		manifolds = manifolds.minus(1);
 	}
 }
-function abstract() {
+function abstract(grav = false) {
 	creation();
+	if(player.gravityWell) {
+		if(player.gravitons.lt(getGravGain())) {
+			player.gravitons = getGravGain();
+		}
+	}
+	player.gravityWell = grav;
 	player.space = player.space.add(spaceOnAbstract());
 	player.exist = new Decimal(0);
 	for(let i = 7; i <= 8; i++) {
@@ -679,6 +801,7 @@ function abstract() {
 	player.existMultCostMult = new Decimal(2);
 	player.existMultCostScale = new Decimal(1.5);
 	player.subtab.existence = "s existUpgrades";
+	
 }
 function toggleAuto(tier) {
 	if(player.autos[tier-1]) {
@@ -718,6 +841,19 @@ function autoBuyers() {
 			buyUpgrade("12");
 		}
 	}
+}
+function gravityWell() {
+	if(!player.gravityWell) {
+		abstract(true);
+	} else {
+		abstract();
+	}
+}
+function getGravGain() {
+	return player.exist.root(80).times(Decimal.pow(3,player.gravityRebuyables[1]));
+}
+function reverseGravGain(grav) {
+	return Decimal.pow(grav.div(Decimal.pow(3,player.gravityRebuyables[1])),80);
 }
 function start() {
 	setInterval(gameLoop, 33);
@@ -760,10 +896,10 @@ function format(number,int=false) {
 		power = number.e;
 		matissa = number.mantissa;
 		mag = number.mag
-        } else {
+		} else {
 		matissa = number / Math.pow(10, Math.floor(Math.log10(number)));
 		power = Math.floor(Math.log10(number));
-        }
+		}
 	
 	if(power < 3) {
 		if(int) {
